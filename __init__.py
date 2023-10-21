@@ -36,6 +36,7 @@ def test_all(*args):
 	for test_case in args:
 		print(f"\nRunning tests in \"{test_case.__name__}\":")
 		test_all_methods_in_(test_case)
+	print("Tests Complete.")
  
 def test_all_methods_in_(test_case):
 	'''
@@ -50,13 +51,9 @@ def test_all_methods_in_(test_case):
 	'''
 	#TODO: make failing tests say which tests failed. 
 	method_list = []
-	# attribute is a string representing the attribute name
 	for attribute in dir(test_case):
-		# Get the attribute value
 		attribute_value = getattr(test_case, attribute)
-		# Check that it is callable
 		if callable(attribute_value):
-			# Filter all dunder (__ prefix) methods
 			if not attribute.startswith('__') and not attribute.endswith('__'):
 				method_list.append(attribute)
 	

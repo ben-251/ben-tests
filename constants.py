@@ -2,9 +2,9 @@ import colorama
 from enum import Enum, auto
 
 CLEAR = colorama.Style.RESET_ALL
-GREEN_ = colour = colorama.Fore.GREEN
-RED_ = colorama.Fore.RED
-CYAN_ = colorama.Fore.CYAN
+GREEN = colour = colorama.Fore.GREEN
+RED = colorama.Fore.RED
+CYAN = colorama.Fore.CYAN
 
 class TestResult(Enum):
 	PASS = auto()

@@ -2,9 +2,9 @@ from .constants import *
 
 def get_colour(state):
 	if state == TestResult.FAIL:
-		return RED_
+		return RED
 	elif state == TestResult.PASS:
-		return GREEN_
+		return GREEN
 	
 def clearColour():
 	print(CLEAR)

@@ -9,16 +9,10 @@ def get_colour(state):
 def clearColour():
 	print(CLEAR)
 
-def display_message(state, actual, expected, isAssertRaise = None):
-	if isAssertRaise:
-		display_exception_message(state, actual, expected)
-	else:
-		display_normal_message(state, actual, expected)
-
 def display_normal_message(state, actual, expected):
 	colour = get_colour(state)
 	if state == TestResult.PASS:
-		print(f"{colour}Ok.")
+		print(f"{colour}Ok.",end = "")
 		clearColour()
 	else:
 		print(f"{colour}Failed. \n\tResult: {actual}\n\tExpected: {expected}")
@@ -28,7 +22,7 @@ def display_exception_message(state, actual_exception, expected_exception):
 	colour = get_colour(state)
 
 	if state == TestResult.PASS:
-		print(f"{colour}Ok.")
+		print(f"{colour}Ok.", end="")
 		clearColour()
 	else:
 		print(f"{colour}Did not raise {expected_exception.__name__}.")

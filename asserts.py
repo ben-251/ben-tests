@@ -7,7 +7,7 @@ def assertEquals(actual:Any,expected: Any):
 	'''Passes only if the actual value exactly matches the expected one.
 	'''
 	result = TestResult.PASS if actual == expected else TestResult.FAIL
-	display_message(result, actual, expected)
+	display_normal_message(result, actual, expected)
 	 
 class _AssertRaisesContext:
 	'''	
@@ -33,7 +33,7 @@ def assertRaises(expected_exception: BaseException, *args, **kwargs): #-> _Asser
 		with assertRaises(SomeException):
    			do_something()	
 	'''
-	return _AssertRaisesContext(expected_exception) 
+	return _AssertRaisesContext(expected_exception) #TODO: make anoother version that also that the exception message is correct
 
 def test() -> str:
 	return 1 # jedi should say something here

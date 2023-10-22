@@ -1,4 +1,4 @@
-from typing import List
+from typing import ClassVar, List
 from .asserts import *
 
 class testCase:
@@ -13,8 +13,12 @@ def test_all(*args: type[testCase]) -> None:
 		bentests.test_all(ArithmeticTests, ExponentialTests)
 	'''
 	for test_case in args:
-		print(f"\nRunning tests in \"{test_case.__name__}\":") 
-		_test_all_methods_in_(test_case)
+		methods = getMethodNames(test_case)
+		if methods:
+			print(f"\nRunning tests in \"{test_case.__name__}\":") 
+			_test_all_methods_in_(test_case)
+		else:
+			print(f"\nNo tests found in \"{test_case.__name__}\".")
 	print("Tests Complete.")
  
 def _test_all_methods_in_(test_case: type[testCase]) -> None:
@@ -29,14 +33,17 @@ def _test_all_methods_in_(test_case: type[testCase]) -> None:
 		bentests.test_all(ArithmeticTests)
 	'''
 	#TODO: make failing tests say which tests failed. 
-	method_list: List[str] = []
-	for attribute in dir(test_case):
-		attribute_value = getattr(test_case, attribute)
-		if callable(attribute_value):
-			if not attribute.startswith('__') and not attribute.endswith('__'):
-				method_list.append(attribute)
-	
+	method_list = getMethodNames(test_case)
 	test_group = test_case()
 	for method_name in method_list:
 		method = getattr(test_group, method_name)
 		method()
+
+def getMethodNames(cls: Type[testCase]) -> List[str]:
+	method_list: List[str] = []
+	for attribute in dir(cls):
+		attribute_value = getattr(cls, attribute)
+		if callable(attribute_value):
+			if not attribute.startswith('__') and not attribute.endswith('__'):
+				method_list.append(attribute)
+	return method_list

@@ -1,6 +1,7 @@
 from .constants import *
+from typing import Any, Type
 
-def get_colour(state):
+def get_colour(state: TestResult):
 	if state == TestResult.FAIL:
 		return RED
 	elif state == TestResult.PASS:
@@ -9,7 +10,7 @@ def get_colour(state):
 def clearColour():
 	print(CLEAR)
 
-def display_normal_message(state, actual, expected):
+def display_normal_message(state: TestResult, actual: Any, expected: Any):
 	colour = get_colour(state)
 	if state == TestResult.PASS:
 		print(f"{colour}Ok.",end = "")
@@ -18,7 +19,7 @@ def display_normal_message(state, actual, expected):
 		print(f"{colour}Failed. \n\tResult: {actual}\n\tExpected: {expected}")
 		clearColour()
 
-def display_exception_message(state, actual_exception, expected_exception):
+def display_exception_message(state: TestResult, actual_exception: Type[Exception] | None, expected_exception: Type[Exception]):
 	colour = get_colour(state)
 
 	if state == TestResult.PASS:

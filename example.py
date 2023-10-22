@@ -7,10 +7,10 @@ class ArithmeticTests(b.testCase):
 
 	def testZeroDivision(self):
 		with b.assertRaises(ZeroDivisionError):
-			v = 1/0
+			v = 1/0 #type: ignore
 
 		with b.assertRaises(ValueError):
-			v = 1 # Should Fail
+			v = 1 # Should Fail #type: ignore
 
 class ExponentialTests(b.testCase):
 	def testSquares(self):
@@ -18,5 +18,9 @@ class ExponentialTests(b.testCase):
 	
 	def testCubes(self):
 		b.assertEquals(125,5**3)
+	
+	def testNested(self):
+		with b.assertRaises(ZeroDivisionError):
+			b.assertEquals(1/0, 1/0)
 
 b.test_all(ExponentialTests, ArithmeticTests)

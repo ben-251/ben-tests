@@ -7,7 +7,7 @@ def assertEquals(actual:Any,expected: Any) -> None:
 	'''
 	#TODO: Add support for numpy arrays. could be in this method or could make another. probably this one
 	result = TestResult.PASS if actual == expected else TestResult.FAIL
-	display_normal_message(result, actual, expected)
+	EqualsMessageDisplayer(result, actual, expected).display_message()
 	 
 class _AssertRaisesContext:
 	'''	
@@ -21,7 +21,7 @@ class _AssertRaisesContext:
 	
 	def __exit__(self,exc_type: type | None, exc_value: Any, tb: Any) -> bool: 
 		result = TestResult.PASS if exc_type == self.expected_exception else TestResult.FAIL
-		display_exception_message(result, exc_type, self.expected_exception)
+		ExceptionMessageDisplayer(result, exc_type, self.expected_exception).display_message()
 		return exc_type is not None and issubclass(exc_type, self.expected_exception)  # suppress the exception if the exception is the requested one 
 
 def assertRaises(expected_exception: type[Exception]): 

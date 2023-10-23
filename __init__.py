@@ -4,6 +4,8 @@ Python self-made TDD framework.
 This module contains classes that form can be used for testing a variety of functionalities,
 for example assertEqual, assertRaises, etc.
 
+Start all test methods with "test"
+
 Example usage:
     import bentests as bt
 

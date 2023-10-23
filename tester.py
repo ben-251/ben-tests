@@ -19,7 +19,7 @@ def test_all(*args: type[testCase]) -> None:
 			_test_all_methods_in_(test_case)
 		else:
 			print(f"\nNo tests found in \"{test_case.__name__}\".")
-	print("Tests Complete.")
+	print("\nTests Complete.")
  
 def _test_all_methods_in_(test_case: type[testCase]) -> None:
 	'''
@@ -36,6 +36,7 @@ def _test_all_methods_in_(test_case: type[testCase]) -> None:
 	method_list = getMethodNames(test_case)
 	test_group = test_case()
 	for method_name in method_list:
+		print(f"- testing {method_name[4:]}") # remove "test"
 		method = getattr(test_group, method_name)
 		method()
 

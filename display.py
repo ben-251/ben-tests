@@ -13,18 +13,18 @@ def clearColour():
 def display_normal_message(state: TestResult, actual: Any, expected: Any):
 	colour = get_colour(state)
 	if state == TestResult.PASS:
-		print(f"{colour}Ok.",end = "")
+		print(f"{' '*4}{colour}Ok.",end = "")
 		clearColour()
 	else:
-		print(f"{colour}Failed. \n\tResult: {actual}\n\tExpected: {expected}")
+		print(f"{' '*4}{colour}Failed. \n\tResult: {actual}\n\tExpected: {expected}")
 		clearColour()
 
 def display_exception_message(state: TestResult, actual_exception: Type[Exception] | None, expected_exception: Type[Exception]):
 	colour = get_colour(state)
 
 	if state == TestResult.PASS:
-		print(f"{colour}Ok.", end="")
+		print(f"{' '*4}{colour}Ok.", end="")
 		clearColour()
 	else:
-		print(f"{colour}Did not raise {expected_exception.__name__}.")
+		print(f"{' '*4}{colour}Did not raise {expected_exception.__name__}.")
 		clearColour()

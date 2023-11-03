@@ -1,5 +1,5 @@
 from .constants import *
-from .display import *
+from .display import EqualsMessageDisplayer, ExceptionMessageDisplayer
 from typing import Any
 import numpy as np
 from .response import Response
@@ -8,13 +8,15 @@ def assertEquals(actual:Any,expected: Any):
 	'''Passes only if the actual value exactly matches the expected one.
 	'''
 	if type(actual) == np.ndarray and type(expected) == np.ndarray:
-		result = TestResult.PASS if np.array_equal(actual, expected) else TestResult.FAIL
+		result = TestResult.PASS if np.array_equal(actual, expected) else TestResult.FAIL # sadly i can't utilise the cleanliness of returns and have to nest (must be compliant with the assert raises one)
 	else: 
 		try:
 			result = TestResult.PASS if actual == expected else TestResult.FAIL
 		except ValueError:
 			result = TestResult.FAIL
-	EqualsMessageDisplayer(result, actual, expected)
+
+	if result == TestResult.FAIL:
+		raise EqualsFailError(actual, expected)
 
 def assertAlmostEquals(actual:Any, expected: Any, error_margin:int|None = None) -> None:
 	'''
@@ -39,7 +41,9 @@ def assertAlmostEquals(actual:Any, expected: Any, error_margin:int|None = None) 
 		result = TestResult.FAIL
 	else:
 		result = TestResult.PASS
-	EqualsMessageDisplayer(result, actual, expected)
+
+	if result == TestResult.FAIL:
+		raise EqualsFailError(actual, expected)
 		
 class _AssertRaisesContext:
 	'''	
@@ -52,9 +56,9 @@ class _AssertRaisesContext:
 		return self
 	
 	def __exit__(self,exc_type: type | None, exc_value: Any, tb: Any) -> bool: 
-		result = TestResult.PASS if exc_type == self.expected_exception else TestResult.FAIL
-		ExceptionMessageDisplayer(result, exc_type, self.expected_exception)
-		return exc_type is not None and issubclass(exc_type, self.expected_exception)  # suppress the exception if the exception is the requested one 
+		if exc_type != self.expected_exception:
+			raise RaisesFailError(exc_type, self.expected_exception) # wait but this unsupresses 
+		return exc_type is not None and issubclass(exc_type, self.expected_exception)  # does it reach here anymore?
 
 def assertRaises(expected_exception: type[Exception]): 
 	'''

@@ -1,10 +1,11 @@
-from typing import ClassVar, List
+from typing import ClassVar, List, Type
 from .asserts import *
+from .constants import GREEN, CLEAR
 
 class testCase:
 	__name__ = "Default"
 
-def test_all(*args: type[testCase]) -> None:
+def test_all(*args: type[testCase],skip_passes=None) -> None:
 	'''
 	Run all the tests within the specified test case.
 
@@ -12,16 +13,19 @@ def test_all(*args: type[testCase]) -> None:
 	.. code-block:: python
 		bentests.test_all(ArithmeticTests, ExponentialTests)
 	'''
+	if skip_passes is None:
+		skip_passes = True
+
 	for test_case in args:
 		methods = getMethodNames(test_case)
 		if methods:
 			print(f"\nRunning tests in \"{test_case.__name__}\":") 
-			_test_all_methods_in_(test_case)
+			_test_all_methods_in_(test_case, skip_passes)
 		else:
 			print(f"\nNo tests found in \"{test_case.__name__}\".")
 	print("\nTests Complete.")
  
-def _test_all_methods_in_(test_case: type[testCase]) -> None:
+def _test_all_methods_in_(test_case: type[testCase], skip_passes: bool) -> None:
 	'''
 	Run all the tests within the specified test group:
 	.. code-block:: python
@@ -35,12 +39,26 @@ def _test_all_methods_in_(test_case: type[testCase]) -> None:
 	#TODO: make failing tests say which tests failed. 
 	method_list = getMethodNames(test_case)
 	test_group = test_case()
+	fail_count = 0
 	for method_name in method_list:
-		print(f"- testing {method_name[4:]}") # remove "test"
 		method = getattr(test_group, method_name)
-		method()
+		try:
+			method()
+		except TestFail as e:
+			print(f"- {method_name[4:]}:") # remove "test"
+			print(e)
+			fail_count += 1
+		else:
+			if not skip_passes:
+				print(f"{method_name[4:]}: ")
+				print(f"{GREEN}{' '*4}Ok.{CLEAR}")
+	
+	if fail_count == 0:
+		print(f"{GREEN}All Tests Passed.{CLEAR}")
+	else:
+		print(f"{RED}{fail_count}{CLEAR} Failing test{'s' if fail_count > 1 else ''}")
 
-def getMethodNames(cls: Type[testCase]) -> List[str]:
+def getMethodNames(cls: type[testCase]) -> List[str]:
 	method_list: List[str] = []
 	for attribute in dir(cls):
 		attribute_value = getattr(cls, attribute)

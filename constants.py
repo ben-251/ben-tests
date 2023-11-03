@@ -40,6 +40,16 @@ class EqualsFailError(TestFail):
 		else:
 			return f"{str(variable)}{RED}"
 
+class AlmostEqualFailError(TestFail):
+	def __init__(self, actual, expected, error_margin):
+		super().__init__(actual, expected)
+		self.error_margin = error_margin
+	
+	def __str__(self):
+		actual_output = self.convert_to_string(round(self.actual, self.error_margin))
+		expected_output = self.convert_to_string(round(self.expected, self.error_margin))
+		return f"{RED}{' '*4}Failed. \n\tResult:   {actual_output}\n\tExpected: {expected_output}{CLEAR}"
+
 class RaisesFailError(TestFail):
 	def __init__(self,actual, expected):
 		super().__init__(actual, expected)

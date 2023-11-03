@@ -1,22 +1,15 @@
 from .constants import *
-from .display import EqualsMessageDisplayer, ExceptionMessageDisplayer
 from typing import Any
 import numpy as np
-from .response import Response
 
 def assertEquals(actual:Any,expected: Any):
 	'''Passes only if the actual value exactly matches the expected one.
 	'''
 	if type(actual) == np.ndarray and type(expected) == np.ndarray:
-		result = TestResult.PASS if np.array_equal(actual, expected) else TestResult.FAIL # sadly i can't utilise the cleanliness of returns and have to nest (must be compliant with the assert raises one)
-	else: 
-		try:
-			result = TestResult.PASS if actual == expected else TestResult.FAIL
-		except ValueError:
-			result = TestResult.FAIL
-
-	if result == TestResult.FAIL:
-		raise EqualsFailError(actual, expected)
+		if not np.array_equal(actual, expected):
+			raise EqualsFailError(actual, expected)
+	elif actual != expected:
+			raise EqualsFailError(actual, expected)
 
 def assertAlmostEquals(actual:Any, expected: Any, error_margin:int|None = None) -> None:
 	'''
@@ -33,18 +26,14 @@ def assertAlmostEquals(actual:Any, expected: Any, error_margin:int|None = None) 
 		error_margin = 7
 
 	if type(actual) == np.ndarray and type(expected) == np.ndarray:
-		result = TestResult.PASS if np.allclose(actual, expected) else TestResult.FAIL
+		if not np.allclose(actual, expected):
+			raise EqualsFailError(actual, expected)
 
 	elif not isinstance(actual, float) and not isinstance(actual, int):
-		result = TestResult.FAIL
-	elif not round(actual-expected,error_margin) == 0:
-		result = TestResult.FAIL
-	else:
-		result = TestResult.PASS
-
-	if result == TestResult.FAIL:
 		raise EqualsFailError(actual, expected)
-		
+	elif not round(actual-expected,error_margin) == 0:
+		raise EqualsFailError(actual, expected)
+
 class _AssertRaisesContext:
 	'''	
 		A context manager used to implement assertRaises* methods.		

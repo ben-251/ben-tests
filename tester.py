@@ -54,9 +54,13 @@ def _test_all_methods_in_(test_case: type[testCase], skip_passes: bool) -> None:
 				print(f"{GREEN}{' '*4}Ok.{CLEAR}")
 	
 	if fail_count == 0:
-		print(f"{GREEN}All Tests Passed.{CLEAR}")
+		test_count = len(method_list)
+		if test_count == 1:
+			print(f"{GREEN} Test Passed.{CLEAR}")
+		else:
+			print(f"{GREEN}All {len(method_list)} Tests Passed.{CLEAR}")
 	else:
-		print(f"{RED}{fail_count}{CLEAR} Failing test{'s' if fail_count > 1 else ''}")
+		print(f"\n{RED}{fail_count}{CLEAR} Failing test{'s' if fail_count > 1 else ''}.")
 
 def getMethodNames(cls: type[testCase]) -> List[str]:
 	method_list: List[str] = []

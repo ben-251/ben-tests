@@ -31,7 +31,7 @@ def assertAlmostEquals(actual:Any, expected: Any, error_margin:int|None = None) 
 
 	elif not isinstance(actual, float) and not isinstance(actual, int):
 		raise EqualsFailError(actual, expected)
-	elif not round(actual-expected,error_margin) == 0:
+	elif not round(actual- expected,error_margin) == 0:
 		raise EqualsFailError(actual, expected)
 
 class _AssertRaisesContext:
@@ -58,4 +58,4 @@ def assertRaises(expected_exception: type[Exception]):
 		with assertRaises(SomeException):
    			do_something()	
 	'''
-	return _AssertRaisesContext(expected_exception) #TODO: make anoother version that also that the exception message is correct
+	return _AssertRaisesContext(expected_exception)

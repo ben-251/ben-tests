@@ -10,3 +10,8 @@ class TestResult(Enum):
 	PASS = auto()
 	FAIL = auto()
 
+class AssertType(Enum):
+	EQUALS = auto()
+	ALMOST_EQUALS = auto()
+	RAISES = auto()
+	DEFAULT = auto()

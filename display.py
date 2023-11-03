@@ -6,7 +6,8 @@ class MessageDisplayer:
 		self.state = state
 		self.actual = actual
 		self.expected = expected
-	
+		self.display_message()
+
 	def display_message(self):
 		if self.state == TestResult.PASS:
 			self.display_pass_message()
@@ -51,14 +52,14 @@ class EqualsMessageDisplayer(MessageDisplayer):
 	def display_fail_message(self):
 		self.setColour(RED)
 		if isinstance(self.actual, str):
-			actual_output = f"\"{self.actual}\""
+			actual_output = f"\"{self.actual}{RED}\""
 		else:
 			actual_output = str(self.actual) # possibly unncessary
 
 		if isinstance(self.expected, str):
-			expected_output = f"\"{self.expected}\""
+			expected_output = f"\"{self.expected}{RED}\"" # "{RED}" incase value has different colours
 		else:
 			expected_output = str(self.expected)
 
-		print(f"{' '*4}Failed. \n\tResult: {actual_output}\n\tExpected: {expected_output}")
+		print(f"{' '*4}Failed. \n\tResult:   {actual_output}\n\tExpected: {expected_output}")
 		self.clearColour()

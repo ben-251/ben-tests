@@ -27,8 +27,8 @@ class ExponentialTests(b.testCase):
 		b.assertEquals(125,5**3)
 	
 	def testNestedExperiment(self):
-		# I'm not sure what i expect to happen here this is just for fun :)
+		# ooh just realised that happens because the zero division will stop it from getting to assert equals. this makes me want to make a assertNotRaises now
 		with b.assertRaises(ZeroDivisionError):
-			b.assertEquals(1/0, 1/0)
+			b.assertEquals(1, 1/0)
 
 b.test_all(ExponentialTests, ArithmeticTests)

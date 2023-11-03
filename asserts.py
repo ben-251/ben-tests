@@ -41,8 +41,6 @@ def assertAlmostEquals(actual:Any, expected: Any, error_margin:int|None = None) 
 		result = TestResult.PASS
 	EqualsMessageDisplayer(result, actual, expected)
 		
-
-	 
 class _AssertRaisesContext:
 	'''	
 		A context manager used to implement assertRaises* methods.		
@@ -68,8 +66,3 @@ def assertRaises(expected_exception: type[Exception]):
    			do_something()	
 	'''
 	return _AssertRaisesContext(expected_exception) #TODO: make anoother version that also that the exception message is correct
-
-
-
-
-

@@ -4,11 +4,7 @@ from enum import Enum, auto
 CLEAR = colorama.Style.RESET_ALL
 GREEN = colour = colorama.Fore.GREEN
 RED = colorama.Fore.RED
-CYAN = colorama.Fore.CYAN
-
-class TestResult(Enum):
-	PASS = auto()
-	FAIL = auto()
+YELLOW = colorama.Fore.YELLOW
 
 class AssertType(Enum):
 	EQUALS = auto()
@@ -40,7 +36,7 @@ class EqualsFailError(TestFail):
 		else:
 			return f"{str(variable)}{RED}"
 
-class AlmostEqualFailError(TestFail):
+class AlmostEqualFailError(EqualsFailError): # this could cause issues when i say isinstance and stuff.
 	def __init__(self, actual, expected, error_margin):
 		super().__init__(actual, expected)
 		self.error_margin = error_margin
@@ -56,3 +52,10 @@ class RaisesFailError(TestFail):
 	
 	def __str__(self):
 		return f"{RED}{' '*4}Did not raise {self.expected.__name__}.{CLEAR}"		
+
+class TestPass():
+	def __init__(self):
+		pass
+
+	def __str__(self):
+		return f"{GREEN}{' '*4}Ok.{CLEAR}"

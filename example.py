@@ -1,6 +1,6 @@
 import bentests as b
 
-class ArithmeticTests(b.testCase):
+class ArithmeticTests(b.testGroup):
 	def testSubtraction(self):
 		b.assertEquals(1,2-1)
 	
@@ -17,9 +17,9 @@ class ArithmeticTests(b.testCase):
 
 	def testValueError(self):
 		with b.assertRaises(ValueError):
-			v = 1 # Should Fail # type: ignore
+			v = 1 # Should Fail
 
-class ExponentialTests(b.testCase):
+class ExponentialTests(b.testGroup):
 	def testSquares(self):
 		b.assertEquals(4,2**2)
 	
@@ -31,4 +31,13 @@ class ExponentialTests(b.testCase):
 		with b.assertRaises(ZeroDivisionError):
 			b.assertEquals(1, 1/0)
 
-b.test_all(ExponentialTests, ArithmeticTests)
+class AllFailingTests(b.testGroup):
+	def testAddition(self):
+		b.assertEquals(1,1+1)
+
+
+class EmptyTests(b.testGroup):
+	...
+
+b.test_all(ExponentialTests, ArithmeticTests, EmptyTests)
+b.test_all(AllFailingTests)

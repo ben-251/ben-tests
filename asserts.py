@@ -21,7 +21,6 @@ def assertAlmostEquals(actual:Any, expected: Any, error_margin:int|None = None) 
 
 	If matrices are input, then the error margin is irrelevant
 	'''
-	#TODO: rename error_margin to better capture the idea of freedom, as in, you can be loose up to n digits
 	if error_margin is None:
 		error_margin = 7
 

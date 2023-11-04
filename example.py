@@ -40,4 +40,3 @@ class EmptyTests(b.testGroup):
 	...
 
 b.test_all(ExponentialTests, ArithmeticTests, EmptyTests)
-b.test_all(AllFailingTests)

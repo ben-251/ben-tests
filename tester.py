@@ -120,16 +120,17 @@ def display_overall_stats(results:List[testGroup]):
 				total_test_count += 1
 				if test.result == TestResult.PASS:
 					total_pass_count += 1
-	
+	total_fail_count = total_test_count-total_pass_count
+
 	print(f"{total_test_count} Test{'' if total_test_count == 1 else 's'} run.")
 	if skipped_count > 0:	
-		print(f"{YELLOW}{skipped_count} Empty Test group{'s' if total_pass_count > 1 else ''} skipped.{CLEAR}")
+		print(f"{YELLOW}{skipped_count} Empty Test group{'s' if skipped_count > 1 else ''} skipped.{CLEAR}")
 
 	if total_pass_count == total_test_count:
 		print(f"{GREEN}All Tests Passed")
 		return # we don't care about the other stats if we've passed all
 
-	print(f"{GREEN}{total_pass_count} Test{'s' if total_pass_count > 1 else ''} passed in total.{CLEAR}")
+	print(f"{GREEN}{total_pass_count} Test{'s' if total_pass_count > 1 else ''} passed{CLEAR}, {RED}{total_fail_count} Test{'s' if total_fail_count > 1 else ''} failed.{CLEAR}")
 	if passing_group_count == 0:
 		print(f"{RED}No Test Groups ran without any fails.{CLEAR}")
 	else:

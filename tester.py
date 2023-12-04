@@ -1,14 +1,12 @@
 from typing import ClassVar, List, Type
 from .asserts import *
-from .constants import GREEN, CLEAR
+from .utils import GREEN, CLEAR
 
 class TestResult(Enum):
 	PASS = auto()
 	FAIL = auto()
 
 class testGroup:
-	__name__ = "Default"
-
 	def __init__(self):
 		self.tests:List[Test] = []
 
@@ -42,7 +40,7 @@ def test_all(*args: type[testGroup],skip_passes=None, display_statistics=None) -
 		methods = getMethodNames(test_group)
 		if methods:
 			print(f"\nRunning tests in \"{test_group.__name__}\":") 
-			results:testGroup = getTestResults(test_group, methods, skip_passes=skip_passes)
+			results = getTestResults(test_group, methods, skip_passes=skip_passes)
 			displayStats(results)
 			all_results.append(results)
 		else:
@@ -52,7 +50,7 @@ def test_all(*args: type[testGroup],skip_passes=None, display_statistics=None) -
 	if display_statistics:
 		display_overall_stats(all_results)
  
-def getTestResults(cls: Type[testGroup], method_list, skip_passes=None):
+def getTestResults(cls: Type[testGroup], method_list, skip_passes=None) -> testGroup:
 	'''
 	Run all the tests within the specified test group:
 	.. code-block:: python
@@ -87,28 +85,28 @@ def display_single_result(test:Test, skip_passes):
 	if test.result == TestResult.PASS:
 		if not skip_passes:
 			print(f"• {test.name}:")
-			print(test.message, end="\n\n")
+			print(test.message)
 	else:
 		print(f"• {test.name}:")
-		print(test.message, end = "\n\n")
+		print(test.message)
 
 def displayStats(test_group:testGroup):
 	test_count = len(test_group.tests)
 	fail_count = sum([test.result == TestResult.FAIL for test in test_group.tests]) # bools are taken as 1 and 0
 
-	if fail_count == 0:
-		if test_count == 1:
-			print(f"{GREEN} Test Passed.{CLEAR}")
-		else:
-			print(f"{GREEN}All {test_count} Tests Passed.{CLEAR}")
-	else:
+	if fail_count != 0:
 		print(f"{RED}{fail_count}{CLEAR} Failing test{'s' if fail_count > 1 else ''} out of {test_count}.")
+	elif test_count == 1:
+		print(f"{GREEN}Test Passed.{CLEAR}")
+	else:
+		print(f"{GREEN}All {test_count} Tests Passed.{CLEAR}")
 
 def display_overall_stats(results:List[testGroup]):
 	skipped_count = 0
 	total_pass_count = 0
 	passing_group_count = 0
 	total_test_count = 0
+	group_count = len(results)
 
 	for result in results:
 		if result is None:
@@ -122,28 +120,34 @@ def display_overall_stats(results:List[testGroup]):
 					total_pass_count += 1
 	total_fail_count = total_test_count-total_pass_count
 
-	print(f"{total_test_count} Test{'' if total_test_count == 1 else 's'} run.")
-	if skipped_count > 0:	
-		print(f"{YELLOW}{skipped_count} Empty Test group{'s' if skipped_count > 1 else ''} skipped.{CLEAR}")
+	if skipped_count > 0:
+		display_message(f"{pluralise('Empty test group', skipped_count)} skipped.",colour=YELLOW)
+
+	display_message(f"{pluralise('Test',total_test_count)} run in {pluralise('Group', group_count)}:")
 
 	if total_pass_count == total_test_count:
-		print(f"{GREEN}All Tests Passed")
+		display_message(f"\tAll Tests Passed.", colour=GREEN)
 		return # we don't care about the other stats if we've passed all
 
-	print(f"{GREEN}{total_pass_count} Test{'s' if total_pass_count > 1 else ''} passed{CLEAR}, {RED}{total_fail_count} Test{'s' if total_fail_count > 1 else ''} failed.{CLEAR}")
+	display_message(f"{pluralise('test', total_pass_count)} passed.", colour=GREEN,indent_level=2)
+	display_message(f"{pluralise('test',total_fail_count)} failed.", colour = RED,indent_level=2)
 	if passing_group_count == 0:
-		print(f"{RED}No Test Groups ran without any fails.{CLEAR}")
+		display_message(f"No Test Groups ran without any fails.",colour=RED)
 	else:
-		print(f"{GREEN}{passing_group_count} Test Group{'s' if passing_group_count > 1 else ''} ran without any fails.{CLEAR}")
-
-	if total_pass_count == 0 and not total_test_count <= 1:
-		print(f"\n{RED}BTW, don't you find it concerning that NONE of your {total_test_count} tests passed?")
+		display_message(f"{pluralise('test group', passing_group_count)} ran without any fails.", colour=GREEN)
 
 def getMethodNames(cls: type[testGroup]) -> List[str]:
-	method_list: List[str] = []
-	for attribute in dir(cls):
-		attribute_value = getattr(cls, attribute)
-		if callable(attribute_value):
-			if not attribute.startswith('__') and not attribute.endswith('__'):
-				method_list.append(attribute)
+	method_list = []
+	for attribute_name in dir(cls):
+		attribute = getattr(cls, attribute_name)
+		is_callable = callable(attribute)
+		is_magic_method = attribute_name.startswith('__') and attribute_name.endswith('__')
+		if is_callable and not is_magic_method:
+			method_list.append(attribute_name)
 	return method_list
+
+def display_message(message, colour=None,no_bullets = None):
+	if colour is None:
+		colour = ""
+	bullet = "" if no_bullets else "• "
+	print(f"{bullet}{colour}{message}{CLEAR}")

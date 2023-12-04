@@ -51,7 +51,10 @@ class RaisesFailError(TestFail):
 		super().__init__(actual, expected)
 	
 	def __str__(self):
-		return f"{RED}{' '*4}Did not raise {self.expected.__name__}.{CLEAR}"		
+		if self.actual is None:
+			return f"{RED}{' '*4}Did not raise {self.expected.__name__}.{CLEAR}"
+		else:
+			raise self.actual # ehhhhh quite a messyy way
 
 class TestPass():
 	def __init__(self):
@@ -59,3 +62,7 @@ class TestPass():
 
 	def __str__(self):
 		return f"{GREEN}{' '*4}Ok.{CLEAR}"
+
+def pluralise(word,count):
+	description = f"{count} {word}"
+	return description if count == 1 else description + "s"

@@ -1,11 +1,15 @@
 import bentests as b
 
+class FloatTests(b.testGroup):
+	def testAlmostRight(self):
+		b.assertAlmostEquals(1.0001,1,error_margin=3)
+
 class ArithmeticTests(b.testGroup):
 	def testSubtraction(self):
 		b.assertEquals(1,2-1)
 	
-	def testWrong(self):
-		b.assertEquals(1,0) # Should Fail
+	def testIncorrectSubtraction(self):
+		b.assertEquals(1,1-1) # Fails.
 
 	def testZeroDivision(self):
 		with b.assertRaises(ZeroDivisionError):
@@ -17,7 +21,7 @@ class ArithmeticTests(b.testGroup):
 
 	def testValueError(self):
 		with b.assertRaises(ValueError):
-			v = 1 # Should Fail
+			v = 1 # Fails.
 
 class ExponentialTests(b.testGroup):
 	def testSquares(self):
@@ -26,11 +30,6 @@ class ExponentialTests(b.testGroup):
 	def testCubes(self):
 		b.assertEquals(125,5**3)
 	
-	def testNestedExperiment(self):
-		# ooh just realised that happens because the zero division will stop it from getting to assert equals. this makes me want to make a assertNotRaises now
-		with b.assertRaises(ZeroDivisionError):
-			b.assertEquals(1, 1/0)
-
 class AllFailingTests(b.testGroup):
 	def testAddition(self):
 		b.assertEquals(1,1+1)
@@ -39,4 +38,4 @@ class AllFailingTests(b.testGroup):
 class EmptyTests(b.testGroup):
 	...
 
-b.test_all(ExponentialTests, ArithmeticTests, EmptyTests)
+b.test_all(FloatTests, ExponentialTests, ArithmeticTests, EmptyTests)

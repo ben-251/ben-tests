@@ -56,6 +56,14 @@ class RaisesFailError(TestFail):
 		else:
 			raise self.actual # ehhhhh quite a messyy way
 
+class NotRaisesFailError(TestFail):
+	def __init__(self,actual, avoiding_exception):
+		self.actual = actual
+		self.avoiding_exception = avoiding_exception
+	
+	def __str__(self):
+		return f"{RED}{' '*4}Raised {self.avoiding_exception.__name__}.{CLEAR}"
+
 class TestPass():
 	def __init__(self):
 		pass

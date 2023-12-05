@@ -58,3 +58,30 @@ def assertRaises(expected_exception: type[Exception]):
    			do_something()	
 	'''
 	return _AssertRaisesContext(expected_exception)
+
+
+class _AssertNotRaisesContext:
+	'''	
+		A context manager used to implement assertRaises* methods.		
+	'''
+	def __init__(self,avoiding_exception: type[Exception]) -> None:
+		self.avoiding_exception = avoiding_exception
+
+	def __enter__(self):
+		return self
+	
+	def __exit__(self,exc_type: type | None, exc_value: Any, tb: Any) -> bool: 
+		if exc_type == self.avoiding_exception:
+			raise NotRaisesFailError(exc_type, self.avoiding_exception)
+		return exc_type is not None and issubclass(exc_type, self.avoiding_exception)  # supress the exception so we can debug normally
+
+def assertNotRaises(avoiding_exception: type[Exception]): 
+	'''
+	Test fails unless an exception of class expected_exception is raised. If a different type of exception is raised, it will not be caught, and the test will exit with an error, just like it would for an unexpected exception.
+
+	Used like this:
+	.. code-block:: python
+		with assertRaises(SomeException):
+   			do_something()	
+	'''
+	return _AssertNotRaisesContext(avoiding_exception)

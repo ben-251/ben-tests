@@ -34,8 +34,14 @@ class AllFailingTests(b.testGroup):
 	def testAddition(self):
 		b.assertEquals(1,1+1)
 
+	def testNotRaiseFail(self):
+		with b.assertNotRaises(ZeroDivisionError):
+			v = 1/0
 
+	def testNotRaiseSuccess(self):
+		with b.assertNotRaises(ZeroDivisionError):
+			v = 1
 class EmptyTests(b.testGroup):
 	...
 
-b.test_all(FloatTests, ExponentialTests, ArithmeticTests, EmptyTests)
+b.test_all(FloatTests, ExponentialTests, ArithmeticTests, EmptyTests, AllFailingTests)

@@ -129,8 +129,8 @@ def display_overall_stats(results:List[testGroup]):
 		display_message(f"\tAll Tests Passed.", colour=GREEN)
 		return # we don't care about the other stats if we've passed all
 
-	display_message(f"{pluralise('test', total_pass_count)} passed.", colour=GREEN,indent_level=2)
-	display_message(f"{pluralise('test',total_fail_count)} failed.", colour = RED,indent_level=2)
+	display_message(f"{pluralise('test', total_pass_count)} passed.", colour=GREEN)
+	display_message(f"{pluralise('test',total_fail_count)} failed.", colour = RED)
 	if passing_group_count == 0:
 		display_message(f"No Test Groups ran without any fails.",colour=RED)
 	else:

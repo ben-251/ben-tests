@@ -62,7 +62,7 @@ def assertRaises(expected_exception: type[Exception]):
 
 class _AssertNotRaisesContext:
 	'''	
-		A context manager used to implement assertRaises* methods.		
+		A context manager used to implement assertNotRaises* methods.		
 	'''
 	def __init__(self,avoiding_exception: type[Exception]) -> None:
 		self.avoiding_exception = avoiding_exception
@@ -77,11 +77,13 @@ class _AssertNotRaisesContext:
 
 def assertNotRaises(avoiding_exception: type[Exception]): 
 	'''
-	Test fails unless an exception of class expected_exception is raised. If a different type of exception is raised, it will not be caught, and the test will exit with an error, just like it would for an unexpected exception.
+	Test fails if an exception of class expected_exception is raised.
+	If a different type of exception is raised, it will not be caught, and the test will exit with an error, 
+	just like it would for an unexpected exception. Might change to surpress, but for now that's bad.
 
 	Used like this:
 	.. code-block:: python
-		with assertRaises(SomeException):
+		with assertNotRaises(SomeException):
    			do_something()	
 	'''
 	return _AssertNotRaisesContext(avoiding_exception)

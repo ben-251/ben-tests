@@ -1,6 +1,8 @@
 from typing import ClassVar, List, Type
 from .asserts import *
 from .utils import GREEN, CLEAR
+from typing import Optional
+
 
 class TestResult(Enum):
 	PASS = auto()
@@ -21,18 +23,23 @@ class Test:
 	def setMessage(self, message:str):
 		self.message = message
 
-def test_all(*args: type[testGroup],skip_passes=None, display_statistics=None) -> None:
+def test_all(*args: type[testGroup],skip_passes=None, stats_amount:Optional[str]=None) -> None:
 	'''
-	Run all the tests within the specified test case.
+	Run all the tests within the specified test groups.
 
-	If more than one test case is specified, test all the tests in each test cases
+	If more than one test case is specified, it tests all groups
 	.. code-block:: python
 		bentests.test_all(ArithmeticTests, ExponentialTests)
+	
+	Stats Amount: The Volume of statistics to provide. "high", "low", and "none".
+	if any other value is provided, "low" is assumed.
+	
+
 	'''
 	if skip_passes is None:
 		skip_passes = True
-	if display_statistics is None:
-		display_statistics = True
+	if stats_amount is None or not stats_amount in ["low", "high", "none"]:
+		stats_amount = "low"
 
 	all_results = []
 	print("Starting tests..")
@@ -47,8 +54,8 @@ def test_all(*args: type[testGroup],skip_passes=None, display_statistics=None) -
 			print(f"{YELLOW}\nNo tests found in \"{test_group.__name__}\".{CLEAR}")
 			all_results.append(None)
 	print("\nTests Complete.")
-	if display_statistics:
-		display_overall_stats(all_results)
+	if not stats_amount == "none":
+		display_overall_stats(all_results, stats_amount)
  
 def getTestResults(cls: Type[testGroup], method_list, skip_passes=None) -> testGroup:
 	'''
@@ -101,7 +108,7 @@ def displayStats(test_group:testGroup):
 	else:
 		print(f"{GREEN}All {test_count} Tests Passed.{CLEAR}")
 
-def display_overall_stats(results:List[testGroup]):
+def display_overall_stats(results:List[testGroup], stats_amount:str):
 	skipped_count = 0
 	total_pass_count = 0
 	passing_group_count = 0
@@ -123,7 +130,8 @@ def display_overall_stats(results:List[testGroup]):
 	if skipped_count > 0:
 		display_message(f"{pluralise('Empty test group', skipped_count)} skipped.",colour=YELLOW)
 
-	display_message(f"{pluralise('Test',total_test_count)} run in {pluralise('Group', group_count)}:")
+	if not stats_amount == "low":
+		display_message(f"{pluralise('Test',total_test_count)} run in {pluralise('Group', group_count)}:")
 
 	if total_pass_count == total_test_count:
 		display_message(f"\tAll Tests Passed.", colour=GREEN)
@@ -131,6 +139,10 @@ def display_overall_stats(results:List[testGroup]):
 
 	display_message(f"{pluralise('test', total_pass_count)} passed.", colour=GREEN)
 	display_message(f"{pluralise('test',total_fail_count)} failed.", colour = RED)
+
+	if stats_amount == "low":
+		return
+
 	if passing_group_count == 0:
 		display_message(f"No Test Groups ran without any fails.",colour=RED)
 	else:

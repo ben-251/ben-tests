@@ -1,5 +1,6 @@
 import colorama
 from enum import Enum, auto
+from typing import Any
 
 CLEAR = colorama.Style.RESET_ALL
 GREEN = colour = colorama.Fore.GREEN
@@ -63,6 +64,14 @@ class NotRaisesFailError(TestFail):
 	
 	def __str__(self):
 		return f"{RED}{' '*4}Raised {self.avoiding_exception.__name__}.{CLEAR}"
+
+class IsNotTrueError(TestFail):
+	def __init__(self, statement:str, result: Any):
+		self.statement = statement
+		self.result = result
+	
+	def __str__(self):
+		return f"{RED}{' '*4}\"{self.statement}\" is not true."
 
 class TestPass():
 	def __init__(self):

@@ -30,7 +30,7 @@ class ExponentialTests(b.testGroup):
 	def testCubes(self):
 		b.assertEquals(125,5**3)
 	
-class AllFailingTests(b.testGroup):
+class MiscTests(b.testGroup):
 	def testAddition(self):
 		b.assertEquals(1,1+1)
 
@@ -41,7 +41,12 @@ class AllFailingTests(b.testGroup):
 	def testNotRaiseSuccess(self):
 		with b.assertNotRaises(ZeroDivisionError):
 			v = 1
+	
+	def testTrueFail(self):
+		v = 0
+		b.assertIsTrue(f"{str(v)} == 1")
+
 class EmptyTests(b.testGroup):
 	...
 
-b.test_all(FloatTests, ExponentialTests, ArithmeticTests, EmptyTests, AllFailingTests)
+b.test_all(FloatTests, ExponentialTests, ArithmeticTests, EmptyTests, MiscTests)

@@ -46,7 +46,11 @@ class MiscTests(b.testGroup):
 		v = 0
 		b.assertIsTrue(f"{str(v)} == 1")
 
+	def testTrueSuccess(self):
+		v = 1
+		b.assertIsTrue(f"{str(v)} == 1")
+
 class EmptyTests(b.testGroup):
 	...
 
-b.test_all(FloatTests, ExponentialTests, ArithmeticTests, EmptyTests, MiscTests)
+b.test_all(FloatTests, ExponentialTests, ArithmeticTests, EmptyTests, MiscTests, stats_amount="high")

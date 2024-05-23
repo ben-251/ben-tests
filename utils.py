@@ -7,6 +7,37 @@ GREEN = colour = colorama.Fore.GREEN
 RED = colorama.Fore.RED
 YELLOW = colorama.Fore.YELLOW
 
+class Colour:
+	Fore: str
+	Back: str
+
+	def __init__(self,name):
+		# defined here to avoid issues with values being set for all colours
+		self.Fore = ""
+		self.Back = ""
+		self.Name = name
+	
+	def SetFore(self,r: int,g:int, b:int):
+		'''
+		Assigns the foreground colour of the text to the rgb value provided
+		'''
+		self.Fore = f'\x1b[38;2;{r};{g};{b}m'
+
+	def SetBack(self,r: int,g:int, b:int):
+		'''
+		Assigns the background colour of the text to the rgb value provided
+		'''
+		self.Back =  f'\x1b[48;2;{r};{g};{b}m'
+	
+	def __str__(self):
+		return self.Fore + self.Back
+	
+GREEN, YELLOW, RED =  [Colour(name) for name in ["green","yellow","red"]]
+GREEN.SetFore(147, 250, 102)
+YELLOW.SetFore(255, 211, 96)
+RED.SetFore(255, 56, 73)
+
+
 class AssertType(Enum):
 	EQUALS = auto()
 	ALMOST_EQUALS = auto()

@@ -8,11 +8,6 @@ class TestResult(Enum):
 	PASS = auto()
 	FAIL = auto()
 
-class testGroup:
-	def __init__(self):
-		self.tests:List[Test] = []
-
-
 class Test:
 	def __init__(self,name):
 		self.name = name[4:]
@@ -22,6 +17,26 @@ class Test:
 	
 	def setMessage(self, message:str):
 		self.message = message
+
+class testGroup:
+	def __init__(self):
+		self.tests:List[Test] = []
+	
+	def __getitem__(self,index):
+		return self.tests[index]
+
+	def __len__(self) -> int:
+		return len(self.tests)
+
+	def __iadd__(self, test:Test):
+		self.tests.append(test)
+		return self
+
+	def __add__(self, test:Test):
+		new_test = testGroup()
+		new_test.tests.append(test)
+		return new_test
+
 
 def test_all(*args: type[testGroup],skip_passes=None, stats_amount:Optional[str]=None) -> None:
 	'''
@@ -42,6 +57,10 @@ def test_all(*args: type[testGroup],skip_passes=None, stats_amount:Optional[str]
 		stats_amount = "low"
 
 	all_results = []
+
+	if args is None:
+		raise ValueError("No tests given")
+
 	print("Starting tests..")
 	for test_group in args:
 		methods = getMethodNames(test_group)
@@ -68,11 +87,13 @@ def getTestResults(cls: Type[testGroup], method_list, skip_passes=None) -> testG
 				bentests.assertEquals(1,2-1)
 		bentests.test_all(ArithmeticTests)
 	'''
-	test_group_instance = cls()
+	if cls is None:
+		raise ValueError("class is none for some reason?!")
+	test_group_instance: testGroup = cls()
 	for method_name in method_list:
 		new_result = getSingleTestResult(cls, method_name, skip_passes=skip_passes)
-		test_group_instance.tests.append(new_result)
-		display_single_result(test_group_instance.tests[-1], skip_passes)
+		test_group_instance += new_result
+		display_single_result(test_group_instance[-1], skip_passes)
 	return test_group_instance
 
 def getSingleTestResult(cls, test_name, skip_passes = None):
@@ -98,13 +119,15 @@ def display_single_result(test:Test, skip_passes):
 		print(test.message)
 
 def displayStats(test_group:testGroup):
-	test_count = len(test_group.tests)
+	test_count = len(test_group)
 	fail_count = sum([test.result == TestResult.FAIL for test in test_group.tests]) # bools are taken as 1 and 0
 
 	if fail_count != 0:
 		print(f"{RED}{fail_count}{CLEAR} Failing test{'s' if fail_count > 1 else ''} out of {test_count}.")
 	elif test_count == 1:
-		print(f"{GREEN}Test Passed.{CLEAR}")
+		print(f"{GREEN}Test passed.{CLEAR}")
+	elif test_count == 2:
+		print(f"{GREEN}Both tests passed. {CLEAR}")
 	else:
 		print(f"{GREEN}All {test_count} Tests Passed.{CLEAR}")
 
@@ -128,25 +151,26 @@ def display_overall_stats(results:List[testGroup], stats_amount:str):
 	total_fail_count = total_test_count-total_pass_count
 
 	if skipped_count > 0:
-		display_message(f"{pluralise('Empty test group', skipped_count)} skipped.",colour=YELLOW)
+		display_message(f"{pluralise('Empty test group', skipped_count)} skipped.\n",colour=YELLOW, no_bullets=True)
 
 	if not stats_amount == "low":
-		display_message(f"{pluralise('Test',total_test_count)} run in {pluralise('Group', group_count)}:")
+		display_message(f"{pluralise('Test',total_test_count)} run in {pluralise('Group', group_count)}:", no_bullets=True)
 
 	if total_pass_count == total_test_count:
-		display_message(f"\tAll Tests Passed.", colour=GREEN)
-		return # we don't care about the other stats if we've passed all
+		display_message(f"All Tests Passed.", colour=GREEN, no_bullets=True)
+		return
+		# The other stats can be safely ignored if all tests have passed.
 
-	display_message(f"{pluralise('test', total_pass_count)} passed.", colour=GREEN)
-	display_message(f"{pluralise('test',total_fail_count)} failed.", colour = RED)
+	display_message(f"{pluralise('test', total_pass_count)} passed.", colour=GREEN, no_bullets=False)
+	display_message(f"{pluralise('test',total_fail_count)} failed.", colour = RED, no_bullets=False)
 
 	if stats_amount == "low":
 		return
 
 	if passing_group_count == 0:
-		display_message(f"No Test Groups ran without any fails.",colour=RED)
+		display_message(f"All test groups had 1 or more fail(s).",colour=RED, no_bullets=True)
 	else:
-		display_message(f"{pluralise('test group', passing_group_count)} ran without any fails.", colour=GREEN)
+		display_message(f"{pluralise('test group', passing_group_count)} ran without any fails.", colour=GREEN, no_bullets=True)
 
 def getMethodNames(cls: type[testGroup]) -> List[str]:
 	method_list = []

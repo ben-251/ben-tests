@@ -20,5 +20,4 @@ dependencies = [
 ]
 
 [project.urls]
-homepage = "https://github.com/yourusername/your-repo"
-repository = "https://github.com/yourusername/your-repo"
+homepage = "https://github.com/ben-251/ben-tests"

@@ -7,7 +7,7 @@ special about making your own stuff, you know?
 
 ## Installation
 ```bash
-pip install --upgrade --force-reinstall bentests@git+https://github.com/ben-251/ben-tests.git
+pip install bentests@git+https://github.com/ben-251/ben-tests.git
 ```
 
 ## Updating

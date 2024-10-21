@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bentests"
+version = "1.0.0"
+description = "A unit-testing framework"
+readme = "README.md"
+requires-python = ">=3.8"
+
+# Dependencies
+dependencies = [
+    "typing",
+    "numpy",
+	"colorama"
+]
+
+[project.urls]
+homepage = "https://github.com/yourusername/your-repo"
+repository = "https://github.com/yourusername/your-repo"

@@ -5,6 +5,12 @@ this is a self-made TDD thing.
 i know there are many testing frameworks out there but there's something
 special about making your own stuff, you know?
 
-Anyway feel free to look about.
-If you want to test it for yourself, download and place in a folder with the 
-other python modules
+## Installation
+```bash
+pip install --upgrade --force-reinstall bentests@git+https://github.com/ben-251/ben-tests.git
+```
+
+## Updating
+```bash
+pip install --upgrade --force-reinstall bentests@git+https://github.com/ben-251/ben-tests.git
+```

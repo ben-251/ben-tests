@@ -7,7 +7,7 @@ packages = ["bentests"]
 
 [project]
 name = "bentests"
-version = "1.0.0"
+version = "1.0.1"
 description = "A unit-testing framework"
 readme = "README.md"
 requires-python = ">=3.8"

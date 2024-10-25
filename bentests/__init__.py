@@ -23,4 +23,4 @@ Example usage:
         bentests.main()
 """
 from .tester import testGroup, test_all
-# from .asserts import *
+from .asserts import assertAlmostEquals, assertEquals, assertIsTrue, assertRaises, assertNotRaises

@@ -1,7 +1,7 @@
-from typing import ClassVar, List, Type
-from .asserts import *
-from .utils import GREEN, CLEAR
+from typing import List, Type
+from .utils import GREEN, CLEAR, YELLOW, RED, TestFail, TestPass, pluralise
 from typing import Optional
+from enum import Enum, auto
 
 
 class TestResult(Enum):

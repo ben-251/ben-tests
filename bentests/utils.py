@@ -12,7 +12,6 @@ class Colour:
 	Back: str
 
 	def __init__(self,name):
-		# defined here to avoid issues with values being set for all colours
 		self.Fore = ""
 		self.Back = ""
 		self.Name = name
@@ -36,7 +35,6 @@ GREEN, YELLOW, RED =  [Colour(name) for name in ["green","yellow","red"]]
 GREEN.SetFore(147, 250, 102)
 YELLOW.SetFore(255, 211, 96)
 RED.SetFore(255, 56, 73)
-
 
 class AssertType(Enum):
 	EQUALS = auto()

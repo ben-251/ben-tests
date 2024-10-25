@@ -22,5 +22,5 @@ Example usage:
     if __name__ == '__main__':
         bentests.main()
 """
-from .tester import *
-from .asserts import *
+from .tester import testGroup, test_all
+# from .asserts import *

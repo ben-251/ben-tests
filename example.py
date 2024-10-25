@@ -1,56 +1,57 @@
-import bentests as b
+from bentests import testGroup, test_all, asserts
 
-class FloatTests(b.testGroup):
+class FloatTests(testGroup):
 	def testAlmostRight(self):
-		b.assertAlmostEquals(1.0001,1,error_margin=3)
+		asserts.assertAlmostEquals(1.0001,1,error_margin=3)
 
-class ArithmeticTests(b.testGroup):
+class ArithmeticTests(testGroup):
 	def testSubtraction(self):
-		b.assertEquals(1,2-1)
+		asserts.assertEquals(1,2-1)
 	
 	def testIncorrectSubtraction(self):
-		b.assertEquals(1,1-1) # Fails.
+		asserts.assertEquals(1,1-1) # Fails.
 
 	def testZeroDivision(self):
-		with b.assertRaises(ZeroDivisionError):
+		with asserts.assertRaises(ZeroDivisionError):
 			v = 1/0 # type: ignore
 
 	def testRaisedException(self):
-		with b.assertRaises(ZeroDivisionError):
+		with asserts.assertRaises(ZeroDivisionError):
 			raise ZeroDivisionError("Zero")
 
 	def testValueError(self):
-		with b.assertRaises(ValueError):
+		with asserts.assertRaises(ValueError):
 			v = 1 # Fails.
 
-class ExponentialTests(b.testGroup):
+class ExponentialTests(testGroup):
 	def testSquares(self):
-		b.assertEquals(4,2**2)
+		asserts.assertEquals(4,2**2)
 	
 	def testCubes(self):
-		b.assertEquals(125,5**3)
+		asserts.assertEquals(125,5**3)
 	
-class MiscTests(b.testGroup):
+class MiscTests(testGroup):
 	def testAddition(self):
-		b.assertEquals(1,1+1)
+		asserts.assertEquals(1,1+1)
 
 	def testNotRaiseFail(self):
-		with b.assertNotRaises(ZeroDivisionError):
+		with asserts.assertNotRaises(ZeroDivisionError):
 			v = 1/0
 
 	def testNotRaiseSuccess(self):
-		with b.assertNotRaises(ZeroDivisionError):
+		with asserts.assertNotRaises(ZeroDivisionError):
 			v = 1
 	
 	def testTrueFail(self):
 		v = 0
-		b.assertIsTrue(f"{str(v)} == 1")
+		asserts.assertIsTrue(f"{str(v)} == 1")
 
 	def testTrueSuccess(self):
 		v = 1
-		b.assertIsTrue(f"{str(v)} == 1")
+		asserts.assertIsTrue(f"{str(v)} == 1")
 
-class EmptyTests(b.testGroup):
+class EmptyTests(testGroup):
 	...
 
-b.test_all(FloatTests, ExponentialTests, ArithmeticTests, EmptyTests, MiscTests, stats_amount="high")
+#b.test_all(FloatTests, ExponentialTests, ArithmeticTests, EmptyTests, MiscTests, stats_amount="high")
+test_all(ArithmeticTests)

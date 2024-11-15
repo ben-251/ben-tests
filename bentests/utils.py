@@ -34,7 +34,7 @@ class Colour:
 GREEN, YELLOW, RED =  [Colour(name) for name in ["green","yellow","red"]]
 GREEN.SetFore(147, 250, 102)
 YELLOW.SetFore(255, 211, 96)
-RED.SetFore(255, 56, 73)
+RED.SetFore(252, 95, 108)
 
 class AssertType(Enum):
 	EQUALS = auto()
@@ -48,7 +48,7 @@ class TestFail(Exception):
 		self.expected = expected
 	
 	def __str__(self) -> str:
-		#print the error message. will then be overriden for raises errors
+		# print the error message. will then be overriden for raises errors
 		return f"{RED}{' '*4}Failed.{CLEAR}"
 
 class EqualsFailError(TestFail):

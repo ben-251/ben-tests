@@ -12,7 +12,6 @@ def assertIsTrue(statement: str):
 	if not result:
 		raise IsNotTrueError(statement, result)
 
-
 def assertEquals(actual:Any,expected: Any):
 	'''Passes only if the actual value exactly matches the expected one.
 	'''

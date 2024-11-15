@@ -51,6 +51,7 @@ def test_all(*args: type[testGroup],skip_passes=None, stats_amount:Optional[str]
 	
 
 	'''
+	#TODO: make high stat amount show all passing tests as well, to quickly tell which ones DID succeed
 	if skip_passes is None:
 		skip_passes = True
 	if stats_amount is None or not stats_amount in ["low", "high", "none"]:

@@ -31,7 +31,7 @@ class ExponentialTests(testGroup):
 		asserts.assertEquals(125,5**3)
 	
 class MiscTests(testGroup):
-	def testAddition(self):
+	def testAdditionFail(self):
 		asserts.assertEquals(1,1+1)
 
 	def testNotRaiseFail(self):
@@ -54,4 +54,4 @@ class EmptyTests(testGroup):
 	...
 
 #b.test_all(FloatTests, ExponentialTests, ArithmeticTests, EmptyTests, MiscTests, stats_amount="high")
-test_all(ArithmeticTests)
+test_all(ArithmeticTests, ExponentialTests, EmptyTests, MiscTests)

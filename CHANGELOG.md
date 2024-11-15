@@ -2,19 +2,18 @@
 
 This project adheres to [Semantic Versioning](https://semver.org).
 
-## [1.0.1]
+## [2.0.0]
 
 ### Added
 
 ### Changed
-
-### Deprecated
-importing asserts directly. for example:
+Function call structure. NOT BACKWARD COMPATIBLE
+This was accidentally referred to as a **deprecation** in the previous version, when the change was already implemented. 
 ```python
 import bentests as bt
 bt.assertEquals
 ```
-will be replaced by
+Must now be called by
 ```python
 from bentests import asserts
 asserts.assertEquals
@@ -24,7 +23,9 @@ asserts.assertEquals
 import bentests as bt
 bt.asserts.assertEquals
 ```
-This is to restrict how much of the module is call-able.
+See example.py for a detailed demonstration.
+### Deprecated
+
 
 ### Removed
 

@@ -1,7 +1,25 @@
-from bentests import testGroup, test_all, asserts
+'''
+A file to test the module before committing/pushing. Differs to example.py because that is primarily for end-users  
+'''
+import sys
+import os
+
+# Add the parent directory of bentests to sys.path
+sys.path.insert(0, os.path.abspath("."))
+
+import importlib
+import bentests.asserts
+import bentests.tester
+
+# Manually reload to reflect changes
+importlib.reload(bentests.tester)
+importlib.reload(bentests.asserts) 
+
+from bentests.tester import testGroup, test_all
+import bentests.asserts as asserts
 
 class FloatTests(testGroup):
-	def testAlmostRight(self):
+	def test_almost_right(self):
 		asserts.assertAlmostEquals(1.0001,1,error_margin=3)
 
 class ArithmeticTests(testGroup):
@@ -53,5 +71,4 @@ class MiscTests(testGroup):
 class EmptyTests(testGroup):
 	...
 
-#b.test_all(FloatTests, ExponentialTests, ArithmeticTests, EmptyTests, MiscTests, stats_amount="high")
 test_all(ArithmeticTests, ExponentialTests, EmptyTests, MiscTests)

@@ -10,7 +10,7 @@ class TestResult(Enum):
 
 class Test:
 	def __init__(self,name):
-		self.name = name[4:]
+		self.name = name[5:] if name[:5] == "test_" else name[4:]
 	
 	def setResult(self, result:TestResult):
 		self.result = result
@@ -62,7 +62,7 @@ def test_all(*args: type[testGroup],skip_passes=None, stats_amount:Optional[str]
 	if args is None:
 		raise ValueError("No tests given")
 
-	print("Starting tests..")
+	print("Starting tests...")
 	for test_group in args:
 		methods = getMethodNames(test_group)
 		if methods:

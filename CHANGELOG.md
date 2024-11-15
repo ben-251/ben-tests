@@ -1,6 +1,13 @@
 # Changelog
 
 This project adheres to [Semantic Versioning](https://semver.org).
+## [2.2.0]
+
+### CHanged 
+- changed function display to split words in function names to avoid bias of snake and camel (e.g "addNumbersTwice" -> "add-numbers-twice")
+
+### In Development
+- diff feature
 
 
 ## [2.1.0]

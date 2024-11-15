@@ -2,6 +2,7 @@ from typing import List, Type
 from .utils import GREEN, CLEAR, YELLOW, RED, TestFail, TestPass, pluralise
 from typing import Optional
 from enum import Enum, auto
+import re
 
 
 class TestResult(Enum):
@@ -9,9 +10,21 @@ class TestResult(Enum):
 	FAIL = auto()
 
 class Test:
-	def __init__(self,name):
-		self.name = name[5:] if name[:5] == "test_" else name[4:]
+	def __init__(self,name):	
+		is_snake_case =  name[:5] == "test_"  # assume camel otherwise
+		name = self.split_name(name, is_snake_case)
+		name = self.strip_test(name, is_snake_case)
+		self.name = name.title()
 	
+	def strip_test(self, name, is_snake_case):
+		return name[5:] if is_snake_case else name[4:]
+
+	def split_name(self, name, is_snake_case):
+		if is_snake_case:
+			return name.replace("_"," ") # fine because dunder methods have already been excluded
+		else:
+			return re.sub(r'([a-z])([A-Z])', r'\1 \2', name)
+		
 	def setResult(self, result:TestResult):
 		self.result = result
 	

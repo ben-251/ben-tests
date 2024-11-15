@@ -2,16 +2,6 @@ from .utils import IsNotTrueError, EqualsFailError, RaisesFailError, NotRaisesFa
 from typing import Any
 import numpy as np
 
-def assertIsTrue(statement: str):
-	'''
-	Passes only if the statement is true
-
-	Takes in statement as a string.
-	'''
-	result = eval(statement)
-	if not result:
-		raise IsNotTrueError(statement, result)
-
 def assertEquals(actual:Any,expected: Any):
 	'''Passes only if the actual value exactly matches the expected one.
 	'''

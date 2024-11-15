@@ -41,14 +41,6 @@ class MiscTests(testGroup):
 	def testNotRaiseSuccess(self):
 		with asserts.assertNotRaises(ZeroDivisionError):
 			v = 1
-	
-	def testTrueFail(self):
-		v = 0
-		asserts.assertIsTrue(f"{str(v)} == 1")
-
-	def testTrueSuccess(self):
-		v = 1
-		asserts.assertIsTrue(f"{str(v)} == 1")
 
 class EmptyTests(testGroup):
 	...

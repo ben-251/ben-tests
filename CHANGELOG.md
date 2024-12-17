@@ -1,6 +1,10 @@
 # Changelog
 
 This project adheres to [Semantic Versioning](https://semver.org).
+## [2.3.1]
+- changed almostEquals so that it can check any iterables of numbers, not just numpy arrays.
+
+
 ## [2.2.0]
 
 ### CHanged 

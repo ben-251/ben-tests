@@ -1,5 +1,7 @@
 from .utils import IsNotTrueError, EqualsFailError, RaisesFailError, NotRaisesFailError
 from typing import Any
+from collections.abc import Iterable
+from numbers import Number
 import numpy as np
 
 def assertEquals(actual:Any,expected: Any):
@@ -10,6 +12,24 @@ def assertEquals(actual:Any,expected: Any):
 			raise EqualsFailError(actual, expected)
 	elif actual != expected:
 			raise EqualsFailError(actual, expected)
+
+def is_iterable_of_numbers(obj):
+    # Check if the object is iterable but not a string
+    if isinstance(obj, Iterable) and not isinstance(obj, (str, bytes)):
+        # Check if all elements are instances of Number
+        return all(isinstance(item, Number) for item in obj)
+    return False
+
+def is_almost_equal(actual, expected, error_margin):
+	diff = actual-expected
+	rounded =  round(diff, error_margin)
+	return rounded == 0
+
+def is_almost_equal_iter(actual, expected, error_margin):
+	for actual_el, expected_el in zip(actual, expected):
+		if not is_almost_equal(actual_el, expected_el, error_margin):
+			return False
+	return True
 
 def assertAlmostEquals(actual:Any, expected: Any, error_margin:int|None = None) -> None:
 	'''
@@ -27,10 +47,12 @@ def assertAlmostEquals(actual:Any, expected: Any, error_margin:int|None = None) 
 	if type(actual) == np.ndarray and type(expected) == np.ndarray:
 		if not np.allclose(actual, expected):
 			raise EqualsFailError(actual, expected)
-
+	elif is_iterable_of_numbers(actual):
+		if not is_almost_equal_iter(actual, expected, error_margin):
+			raise EqualsFailError(actual, expected)
 	elif not isinstance(actual, float) and not isinstance(actual, int):
 		raise EqualsFailError(actual, expected)
-	elif not round(actual - expected, error_margin) == 0:
+	elif not is_almost_equal(actual, expected, error_margin):
 		raise EqualsFailError(actual, expected)
 
 class _AssertRaisesContext:

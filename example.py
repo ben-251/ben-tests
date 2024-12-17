@@ -4,6 +4,20 @@ class FloatTests(testGroup):
 	def testAlmostRight(self):
 		asserts.assertAlmostEquals(1.0001,1,error_margin=3)
 
+	def test_almost_right_two(self):
+		asserts.assertAlmostEquals(
+			[0.0001,0.10000001,0.2000001],
+			[0,0.1,0.2],
+			3
+		)
+
+	def test_just_barely_wrong(self):
+		asserts.assertAlmostEquals(
+			[0.001,0.10000001,0.2000001],
+			[0,0.1,0.2],
+			4
+		)
+
 class ArithmeticTests(testGroup):
 	def testSubtraction(self):
 		asserts.assertEquals(1,2-1)
@@ -46,4 +60,4 @@ class EmptyTests(testGroup):
 	...
 
 #b.test_all(FloatTests, ExponentialTests, ArithmeticTests, EmptyTests, MiscTests, stats_amount="high")
-test_all(ArithmeticTests, ExponentialTests, EmptyTests, MiscTests)
+test_all(FloatTests, ArithmeticTests, ExponentialTests, EmptyTests, MiscTests)

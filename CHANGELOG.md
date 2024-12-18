@@ -1,6 +1,13 @@
 # Changelog
 
 This project adheres to [Semantic Versioning](https://semver.org).
+
+## [2.3.2]
+### Fixed
+- almostEqual only working for values of the same type (preventing the use of mpmath)
+### Improved
+- used allclose instead of manual closeness to allow for more accurate measure of closeness
+
 ## [2.3.1]
 - changed almostEquals so that it can check any iterables of numbers, not just numpy arrays.
 

@@ -6,7 +6,7 @@ class FloatTests(testGroup):
 
 	def test_almost_right_two(self):
 		asserts.assertAlmostEquals(
-			[0.0001,0.10000001,0.2000001],
+			[0.00000001,0.10000001,0.2000001],
 			[0,0.1,0.2],
 			3
 		)
@@ -33,7 +33,7 @@ class ArithmeticTests(testGroup):
 		with asserts.assertRaises(ZeroDivisionError):
 			raise ZeroDivisionError("Zero")
 
-	def testValueError(self):
+	def testValueErrorExpectedFail(self):
 		with asserts.assertRaises(ValueError):
 			v = 1 # Fails.
 

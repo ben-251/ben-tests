@@ -1,8 +1,11 @@
 from .utils import IsNotTrueError, EqualsFailError, RaisesFailError, NotRaisesFailError
-from typing import Any
+from typing import Any, Optional
 from collections.abc import Iterable
 from numbers import Number
 import numpy as np
+import math
+
+
 
 def assertEquals(actual:Any,expected: Any):
 	'''Passes only if the actual value exactly matches the expected one.
@@ -25,13 +28,13 @@ def is_almost_equal(actual, expected, error_margin):
 	rounded =  round(diff, error_margin)
 	return rounded == 0
 
-def is_almost_equal_iter(actual, expected, error_margin):
+def is_almost_equal_iter(actual, expected, rel_tolerance, abs_tolerance):
 	for actual_el, expected_el in zip(actual, expected):
-		if not is_almost_equal(actual_el, expected_el, error_margin):
+		if not math.isclose(actual_el, expected_el, rel_tol=rel_tolerance, abs_tol=abs_tolerance):
 			return False
 	return True
 
-def assertAlmostEquals(actual:Any, expected: Any, error_margin:int|None = None) -> None:
+def assertAlmostEquals(actual:Any, expected: Any, error_margin:Optional[int] = None) -> None:
 	'''
 	Passes if the elements are within a range of each other.
 	For example:
@@ -42,17 +45,19 @@ def assertAlmostEquals(actual:Any, expected: Any, error_margin:int|None = None) 
 	If matrices are input, then the error margin is irrelevant
 	'''
 	if error_margin is None:
-		error_margin = 7
+		error_margin = 8
+	rel_tolerance = 10 ** -error_margin
+	abs_tolerance = 10 ** -math.ceil(error_margin/2)
 
 	if type(actual) == np.ndarray and type(expected) == np.ndarray:
 		if not np.allclose(actual, expected):
 			raise EqualsFailError(actual, expected)
 	elif is_iterable_of_numbers(actual):
-		if not is_almost_equal_iter(actual, expected, error_margin):
+		if not is_almost_equal_iter(actual, expected, rel_tolerance, abs_tolerance):
 			raise EqualsFailError(actual, expected)
 	elif not isinstance(actual, float) and not isinstance(actual, int):
 		raise EqualsFailError(actual, expected)
-	elif not is_almost_equal(actual, expected, error_margin):
+	elif not math.isclose(actual, expected, rel_tol=rel_tolerance, abs_tol=abs_tolerance):
 		raise EqualsFailError(actual, expected)
 
 class _AssertRaisesContext:

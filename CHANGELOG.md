@@ -2,6 +2,10 @@
 
 This project adheres to [Semantic Versioning](https://semver.org).
 
+## [2.3.3]
+### Fixed
+- `assertRaises` no longer re-raises the error when an unexpected one is raised. Instead it displays "raised {unexpected error name}"
+
 ## [2.3.2]
 ### Fixed
 - almostEqual only working for values of the same type (preventing the use of mpmath)

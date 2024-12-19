@@ -84,7 +84,8 @@ class RaisesFailError(TestFail):
 		if self.actual is None:
 			return f"{RED}{' '*4}Did not raise {self.expected.__name__}.{CLEAR}"
 		else:
-			raise self.actual # ehhhhh quite a messyy way
+			return f"{RED}{' '*4}Raises {self.actual.__name__}.{CLEAR}"
+
 
 class NotRaisesFailError(TestFail):
 	def __init__(self,actual, avoiding_exception):

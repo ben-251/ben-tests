@@ -77,7 +77,8 @@ class _AssertRaisesContext:
 
 def assertRaises(expected_exception: type[Exception]): 
 	'''
-	Test fails unless an exception of class expected_exception is raised. If a different type of exception is raised, it will not be caught, and the test will exit with an error, just like it would for an unexpected exception.
+	Test fails unless an exception of class `expected_exception` is raised.
+	If a different type of exception is raised, it will be handled by the assert
 
 	Used like this:
 	.. code-block:: python

@@ -18,6 +18,10 @@ class FloatTests(testGroup):
 			4
 		)
 
+	def test_raises_wrong_error(self):
+		with asserts.assertRaises(ValueError):
+			a = 1/0
+			
 class ArithmeticTests(testGroup):
 	def testSubtraction(self):
 		asserts.assertEquals(1,2-1)

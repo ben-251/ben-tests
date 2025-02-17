@@ -2,9 +2,17 @@
 
 This project adheres to [Semantic Versioning](https://semver.org).
 
+## [2.4.1]
+### Improved
+- Refactored the test-skip feature
+- Added more detailed test-skip statistics
+
 ## [2.4.0]
 ### Added
 - Option to disable individual tests via the "skip" keyword.
+
+### In Development
+- Recognition of individual skips in the final display: "3 test(s) force-skipped"
 
 ## [2.3.3]
 ### Fixed

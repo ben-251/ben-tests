@@ -110,6 +110,20 @@ class TestPass():
 	def __str__(self):
 		return f"{GREEN}{' '*4}Ok.{CLEAR}"
 
+class TestSkip():
+	'''
+	To match with the form of `TestPass`. Used when individual tests are skipped.
+	'''
+	def __init__(self):
+		pass
+
+	def __str__(self):
+		return f"{YELLOW}{' '*4}Skipped.{CLEAR}"
+
 def pluralise(word,count):
+	'''
+	Basic pluraliser. Adds s to words that are greater than 1 in quantity.
+	Complex pluralisation to come.
+	'''
 	description = f"{count} {word}"
 	return description if count == 1 else description + "s"

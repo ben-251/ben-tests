@@ -1,5 +1,5 @@
 from typing import List, Type
-from .utils import GREEN, CLEAR, YELLOW, RED, TestFail, TestPass, pluralise
+from .utils import GREEN, CLEAR, YELLOW, RED, TestFail, TestPass, TestSkip, pluralise
 from typing import Optional
 from enum import Enum, auto
 import re
@@ -9,16 +9,15 @@ import inspect
 class TestResult(Enum):
 	PASS = auto()
 	FAIL = auto()
-
-
-class SkippedTest(Exception): ...
+	SKIP = auto()
 
 class Test:
-	def __init__(self,name):	
+	def __init__(self,name, is_skipped:Optional[bool]=None):	
 		is_snake_case =  name[:5] == "test_"  # assume camel otherwise
 		name = self.split_name(name, is_snake_case)
 		name = self.strip_test(name, is_snake_case)
 		self.name = name.title()
+		self.is_skipped = False if is_skipped is None else is_skipped
 	
 	def strip_test(self, name, is_snake_case):
 		return name[5:] if is_snake_case else name[4:]
@@ -110,24 +109,22 @@ def getTestResults(cls: Type[testGroup], method_list, skip_passes=None) -> testG
 
 	test_group_instance: testGroup = cls()
 	for method_name in method_list:
-		try:
-			new_result = getSingleTestResult(cls, method_name, skip_passes=skip_passes)
-			test_group_instance += new_result
-			display_single_result(test_group_instance[-1], skip_passes)
-		except SkippedTest:
-			continue
+		new_result = getSingleTestResult(cls, method_name, skip_passes=skip_passes)
+		test_group_instance += new_result
+		display_single_result(test_group_instance[-1], skip_passes)
 	return test_group_instance
 
 def getSingleTestResult(cls, test_name, skip_passes = None):
 	test_method = getattr(cls, test_name)
-	current_test = Test(test_name)
-
 	signature = inspect.signature(test_method)
 	params = signature.parameters
 	is_skipped = params["skip"].default is True if "skip" in params else False
-	if is_skipped:
-		raise SkippedTest()
+	current_test = Test(test_name, is_skipped=is_skipped)
 
+	if current_test.is_skipped:
+		current_test.setResult(TestResult.SKIP)
+		current_test.setMessage(str(TestSkip()))
+		return current_test
 	try:
 		test_method(cls)
 	except TestFail as fail_message:
@@ -150,22 +147,33 @@ def display_single_result(test:Test, skip_passes):
 def displayStats(test_group:testGroup):
 	test_count = len(test_group)
 	fail_count = sum([test.result == TestResult.FAIL for test in test_group.tests]) # bools are taken as 1 and 0
+	skip_count = sum([test.result == TestResult.SKIP for test in test_group.tests])
+	pass_count = test_count - fail_count - skip_count
+
+	if skip_count:
+		print(f"{YELLOW}{pluralise("test", skip_count)} skipped.{CLEAR}")
 
 	if fail_count != 0:
-		print(f"{RED}{fail_count}{CLEAR} Failing test{'s' if fail_count > 1 else ''} out of {test_count}.")
+		print(f"{RED}{fail_count}{CLEAR} failing out of {test_count-skip_count} run test{'s' if fail_count > 1 else ''}.")
+		return
 	elif test_count == 1:
 		print(f"{GREEN}Test passed.{CLEAR}")
 	elif test_count == 2:
 		print(f"{GREEN}Both tests passed. {CLEAR}")
 	else:
-		print(f"{GREEN}All {test_count} Tests Passed.{CLEAR}")
+		print(f"{GREEN}All {pass_count} Tests Passed.{CLEAR}") # use this rather than test_count because skipped tests shouldn't be counted
 
 def display_overall_stats(results:List[testGroup], stats_amount:str):
+	# groups of tests
 	skipped_count = 0
-	total_pass_count = 0
 	passing_group_count = 0
-	total_test_count = 0
 	group_count = len(results)
+
+	# individual tests
+	total_pass_count = 0
+	total_test_count = 0
+	total_skip_count = 0
+	total_fail_count = 0
 
 	for result in results:
 		if result is None:
@@ -177,8 +185,11 @@ def display_overall_stats(results:List[testGroup], stats_amount:str):
 				total_test_count += 1
 				if test.result == TestResult.PASS:
 					total_pass_count += 1
-	total_fail_count = total_test_count-total_pass_count
-
+				elif test.result == TestResult.SKIP:
+					total_skip_count += 1
+				elif test.result == TestResult.FAIL:
+					total_fail_count += 1
+				# No else cuz there could be other results potentially but idc about them.
 	if skipped_count > 0:
 		display_message(f"{pluralise('Empty test group', skipped_count)} skipped.\n",colour=YELLOW, no_bullets=True)
 
@@ -192,6 +203,7 @@ def display_overall_stats(results:List[testGroup], stats_amount:str):
 
 	display_message(f"{pluralise('test', total_pass_count)} passed.", colour=GREEN, no_bullets=False)
 	display_message(f"{pluralise('test',total_fail_count)} failed.", colour = RED, no_bullets=False)
+	display_message(f"{pluralise('test',total_skip_count)} skipped.", colour = YELLOW, no_bullets=False)
 
 	if stats_amount == "low":
 		return

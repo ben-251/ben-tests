@@ -3,11 +3,15 @@ from .utils import GREEN, CLEAR, YELLOW, RED, TestFail, TestPass, pluralise
 from typing import Optional
 from enum import Enum, auto
 import re
+import inspect
 
 
 class TestResult(Enum):
 	PASS = auto()
 	FAIL = auto()
+
+
+class SkippedTest(Exception): ...
 
 class Test:
 	def __init__(self,name):	
@@ -103,16 +107,27 @@ def getTestResults(cls: Type[testGroup], method_list, skip_passes=None) -> testG
 	'''
 	if cls is None:
 		raise ValueError("class is none for some reason?!")
+
 	test_group_instance: testGroup = cls()
 	for method_name in method_list:
-		new_result = getSingleTestResult(cls, method_name, skip_passes=skip_passes)
-		test_group_instance += new_result
-		display_single_result(test_group_instance[-1], skip_passes)
+		try:
+			new_result = getSingleTestResult(cls, method_name, skip_passes=skip_passes)
+			test_group_instance += new_result
+			display_single_result(test_group_instance[-1], skip_passes)
+		except SkippedTest:
+			continue
 	return test_group_instance
 
 def getSingleTestResult(cls, test_name, skip_passes = None):
 	test_method = getattr(cls, test_name)
 	current_test = Test(test_name)
+
+	signature = inspect.signature(test_method)
+	params = signature.parameters
+	is_skipped = params["skip"].default is True if "skip" in params else False
+	if is_skipped:
+		raise SkippedTest()
+
 	try:
 		test_method(cls)
 	except TestFail as fail_message:

@@ -2,6 +2,10 @@
 
 This project adheres to [Semantic Versioning](https://semver.org).
 
+## [2.4.0]
+### Added
+- Option to disable individual tests via the "skip" keyword.
+
 ## [2.3.3]
 ### Fixed
 - `assertRaises` no longer re-raises the error when an unexpected one is raised. Instead it displays "raised {unexpected error name}"

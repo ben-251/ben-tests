@@ -60,6 +60,12 @@ class MiscTests(testGroup):
 		with asserts.assertNotRaises(ZeroDivisionError):
 			v = 1
 	
+	def testNotSkipped(self, skip=False):
+		asserts.assertEquals("1", 1)
+
+	def testSkipped(self, skip=True):
+		print("uh oh, still running!")
+		asserts.assertEquals("1", 1)
 
 class EmptyTests(testGroup):
 	...

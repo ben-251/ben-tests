@@ -67,12 +67,15 @@ def test_all(*args: type[testGroup],skip_passes=None, stats_amount:Optional[str]
 	
 
 	'''
-	#TODO: make high stat amount show all passing tests as well, to quickly tell which ones DID succeed
-	if skip_passes is None:
-		skip_passes = True
+	DEFAULT_STATS_LEVEL = "low"
+	DEFAULT_SKIP_BEHAVIOUR = False
 	if stats_amount is None or not stats_amount in ["low", "high", "none"]:
-		stats_amount = "low"
-
+		stats_amount = DEFAULT_STATS_LEVEL
+	if stats_amount != "low" and skip_passes is None:
+		# high stat means we should probably show all passing tests as well, to quickly tell which ones DID succeed
+		skip_passes = False 
+	if skip_passes is None: # if skip_passes is _still_ none, then we go to default (which happens to be False)
+		skip_passes = DEFAULT_SKIP_BEHAVIOUR
 	all_results = []
 
 	if args is None:

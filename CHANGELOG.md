@@ -2,6 +2,10 @@
 
 This project adheres to [Semantic Versioning](https://semver.org).
 
+## [2.4.2]
+### Changed
+- Default behaviour is now to show all test results, even passes.
+
 ## [2.4.1]
 ### Improved
 - Refactored the test-skip feature

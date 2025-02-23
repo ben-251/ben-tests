@@ -2,6 +2,10 @@
 
 This project adheres to [Semantic Versioning](https://semver.org).
 
+## [2.4.3]
+### Improved 
+- Autosuggestion for `stats_amount` will now show the options of "high", "low", and "none"
+
 ## [2.4.2]
 ### Changed
 - Default behaviour is now to show all test results, even passes.

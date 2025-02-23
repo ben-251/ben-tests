@@ -1,4 +1,4 @@
-from typing import List, Type
+from typing import List, Literal, Type
 from .utils import GREEN, CLEAR, YELLOW, RED, TestFail, TestPass, TestSkip, pluralise
 from typing import Optional
 from enum import Enum, auto
@@ -54,7 +54,7 @@ class testGroup:
 		return new_test
 
 
-def test_all(*args: type[testGroup],skip_passes=None, stats_amount:Optional[str]=None) -> None:
+def test_all(*args: type[testGroup],skip_passes=None, stats_amount:Optional[Literal["high", "low","none"]]=None) -> None:
 	'''
 	Run all the tests within the specified test groups.
 

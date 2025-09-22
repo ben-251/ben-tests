@@ -1,6 +1,7 @@
 '''
 A file to test the module before committing/pushing. Differs to example.py because that is primarily for end-users  
 '''
+from enum import Enum, auto
 import sys
 import os
 
@@ -20,7 +21,10 @@ import bentests.asserts as asserts
 
 class FloatTests(testGroup):
 	def test_almost_right(self):
-		asserts.assertAlmostEquals(1.0001,1,error_margin=3)
+		asserts.assertAlmostEquals(1.00134758374583475,1,error_margin=3)
+
+	def test_almost_almost_right(self):
+		asserts.assertAlmostEquals(1.01478735475453453,1,error_margin=3)
 
 class ArithmeticTests(testGroup):
 	def testSubtraction(self):
@@ -67,7 +71,20 @@ class MiscTests(testGroup):
 		print("uh oh, still running!")
 		asserts.assertEquals("1", 1)
 
+class FancyOutputTests(testGroup):
+	def testEnumList(self):
+		class AnimalType(Enum):
+			Dog = 0
+			Cat = 1
+		
+		answer = []
+		for i in range(4):
+			answer.append(AnimalType(i%2))
+		
+		asserts.assertEquals([AnimalType.Dog, AnimalType.Dog, AnimalType.Cat], answer)
+
+
 class EmptyTests(testGroup):
 	...
 
-test_all(ArithmeticTests, ExponentialTests, EmptyTests, MiscTests)
+test_all(FloatTests, ArithmeticTests, ExponentialTests, EmptyTests, MiscTests, FancyOutputTests)

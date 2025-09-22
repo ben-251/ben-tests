@@ -10,7 +10,7 @@ class MovementTests(bt.testGroup):
 		def test_default_curve(self): ...
 ```
 
-pretty print where possible?
+pretty print where possible? (pretty print added now, but still need to fix the indentation, since every line needs to be extra indented)
 
 # Bugs
 

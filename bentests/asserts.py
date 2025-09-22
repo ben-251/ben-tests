@@ -1,4 +1,4 @@
-from .utils import IsNotTrueError, EqualsFailError, RaisesFailError, NotRaisesFailError
+from .utils import AlmostEqualFailError, IsNotTrueError, EqualsFailError, RaisesFailError, NotRaisesFailError
 from typing import Any, Optional
 from collections.abc import Iterable
 from numbers import Number
@@ -49,16 +49,17 @@ def assertAlmostEquals(actual:Any, expected: Any, error_margin:Optional[int] = N
 	rel_tolerance = 10 ** -error_margin
 	abs_tolerance = 10 ** -math.ceil(error_margin/2)
 
-	if type(actual) == np.ndarray and type(expected) == np.ndarray:
+	if type(actual) == np.ndarray and type(expected) == np.ndarray: # Matrix/Vector of Nums
 		if not np.allclose(actual, expected):
 			raise EqualsFailError(actual, expected)
-	elif is_iterable_of_numbers(actual):
+	elif is_iterable_of_numbers(actual): # List of Nums
 		if not is_almost_equal_iter(actual, expected, rel_tolerance, abs_tolerance):
 			raise EqualsFailError(actual, expected)
-	elif not isinstance(actual, float) and not isinstance(actual, int):
+	elif not isinstance(actual, float) and not isinstance(actual, int): #NaN
 		raise EqualsFailError(actual, expected)
 	elif not math.isclose(actual, expected, rel_tol=rel_tolerance, abs_tol=abs_tolerance):
-		raise EqualsFailError(actual, expected)
+		# by this point, any values coming in must be floats or ints
+		raise AlmostEqualFailError(actual, expected,error_margin=error_margin)
 
 class _AssertRaisesContext:
 	'''	

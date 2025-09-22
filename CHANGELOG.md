@@ -2,6 +2,15 @@
 
 This project adheres to [Semantic Versioning](https://semver.org).
 
+## [2.4.4]
+### Improved
+- Output of failing tests now passes through pretty print for a cleaner look.
+
+### In Development
+- Nested Test Groups
+- diff feature
+
+
 ## [2.4.3]
 ### Improved 
 - Autosuggestion for `stats_amount` will now show the options of "high", "low", and "none"

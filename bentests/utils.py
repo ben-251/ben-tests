@@ -53,6 +53,10 @@ def catch_output(func:Callable, *args, **kwargs):
 		func(*args, **kwargs)
 	return buffer.getvalue()
 
+def catch_pretty_output(value):
+	output = catch_output(pprint.pprint, value, underscore_numbers=True)
+	return output
+
 class TestFail(Exception):
 	def __init__(self, actual, expected):
 		self.actual = actual
@@ -67,8 +71,8 @@ class EqualsFailError(TestFail):
 		super().__init__(actual, expected)
 
 	def __str__(self):
-		actual_output = catch_output(pprint.pprint, self.actual)
-		expected_output = catch_output(pprint.pprint, self.expected)
+		actual_output = catch_pretty_output(self.actual)
+		expected_output = catch_pretty_output(self.expected)
 		
 		return f"{RED}{' '*4}Failed. \n\tResult:   {actual_output}\n\tExpected: {expected_output}{CLEAR}"
 	
@@ -84,8 +88,10 @@ class AlmostEqualFailError(EqualsFailError): # this could cause issues when i sa
 		self.error_margin = error_margin
 	
 	def __str__(self):
-		actual_output = self.convert_to_string(round(self.actual, self.error_margin))
-		expected_output = self.convert_to_string(round(self.expected, self.error_margin))
+		actual_rounded = round(self.actual, self.error_margin)
+		expected_rounded = round(self.expected, self.error_margin)
+		actual_output = catch_pretty_output(actual_rounded)
+		expected_output = catch_pretty_output(expected_rounded)
 		return f"{RED}{' '*4}Failed. \n\tResult:   {actual_output}\n\tExpected: {expected_output}{CLEAR}"
 
 class RaisesFailError(TestFail):

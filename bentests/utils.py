@@ -1,6 +1,11 @@
 import colorama
+import sys
+import pprint
+from io import StringIO
 from enum import Enum, auto
-from typing import Any
+from typing import Any, Callable
+from contextlib import redirect_stdout
+
 
 CLEAR = colorama.Style.RESET_ALL
 GREEN = colour = colorama.Fore.GREEN
@@ -42,6 +47,12 @@ class AssertType(Enum):
 	RAISES = auto()
 	DEFAULT = auto()
 
+def catch_output(func:Callable, *args, **kwargs):
+	buffer = StringIO()
+	with redirect_stdout(buffer):
+		func(*args, **kwargs)
+	return buffer.getvalue()
+
 class TestFail(Exception):
 	def __init__(self, actual, expected):
 		self.actual = actual
@@ -54,10 +65,11 @@ class TestFail(Exception):
 class EqualsFailError(TestFail):
 	def __init__(self,actual, expected):
 		super().__init__(actual, expected)
-	
+
 	def __str__(self):
-		actual_output = self.convert_to_string(self.actual)
-		expected_output = self.convert_to_string(self.expected)
+		actual_output = catch_output(pprint.pprint, self.actual)
+		expected_output = catch_output(pprint.pprint, self.expected)
+		
 		return f"{RED}{' '*4}Failed. \n\tResult:   {actual_output}\n\tExpected: {expected_output}{CLEAR}"
 	
 	def convert_to_string(self, variable):

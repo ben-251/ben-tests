@@ -12,8 +12,16 @@ class MovementTests(bt.testGroup):
 
 pretty print where possible? (pretty print added now, but still need to fix the indentation, since every line needs to be extra indented)
 
-# Bugs
+for enums, I want to have pp(enum_instance) call enum_instance.__str__(), so maybe pprinting is not best
 
+for all objects, I want to list properties if in full detail mode, so like
+```bash
+Expected:
+
+```
+
+# Bugs
+- it currently can't compare something as simple as a list of numpy arrays, since the type check only checks if the elements are np arrays, then assumes no np otherwise
 - Doesn't actually do the errors if its not expected. for example:
 ```python
 	def testWrongErrorType(self):

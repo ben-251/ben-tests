@@ -3,8 +3,10 @@ import sys
 import pprint
 from io import StringIO
 from enum import Enum, auto
-from typing import Any, Callable
+from typing import Any, Callable, Iterable
 from contextlib import redirect_stdout
+from functools import singledispatchmethod
+from bentests.display import Printer
 
 
 CLEAR = colorama.Style.RESET_ALL
@@ -47,6 +49,8 @@ class AssertType(Enum):
 	RAISES = auto()
 	DEFAULT = auto()
 
+printer = Printer()
+
 def catch_output(func:Callable, *args, **kwargs):
 	buffer = StringIO()
 	with redirect_stdout(buffer):
@@ -54,7 +58,11 @@ def catch_output(func:Callable, *args, **kwargs):
 	return buffer.getvalue()
 
 def catch_pretty_output(value):
-	output = catch_output(pprint.pprint, value, underscore_numbers=True)
+	custom_pprint = True
+	if custom_pprint:
+		output = catch_output(printer.pretty_print, value)
+	else:
+		output = catch_output(pprint.pprint, value, underscore_numbers=True)
 	return output
 
 class TestFail(Exception):

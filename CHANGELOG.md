@@ -1,6 +1,9 @@
 # Changelog
 
 This project adheres to [Semantic Versioning](https://semver.org).
+## [2.4.5]
+### Improved
+- Added custom pretty print!
 
 ## [2.4.4]
 ### Improved

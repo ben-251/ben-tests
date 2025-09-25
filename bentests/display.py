@@ -126,9 +126,7 @@ class Printer:
 	@pretty_print.register
 	def _(self, variable:Enum, depth=0,end=""):
 		enum_type = variable.__class__.__name__
-		enum_category = variable.name
-		enum_value = variable.value
-		output = f"{enum_category}: {enum_value} ({enum_type})"
+		output = f"{str(variable)} ({enum_type})"
 		self.tprint(output, depth,end=end)
 	
 	@pretty_print.register

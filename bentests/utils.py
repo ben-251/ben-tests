@@ -82,7 +82,7 @@ class EqualsFailError(TestFail):
 		actual_output = catch_pretty_output(self.actual)
 		expected_output = catch_pretty_output(self.expected)
 		
-		return f"{RED}{' '*4}Failed. \n\tResult:   {actual_output}\n\tExpected: {expected_output}{CLEAR}"
+		return f"{RED}{' '*4}Failed. \n\tResult:   {CLEAR}{actual_output}\n\t{RED}Expected: {CLEAR}{expected_output}{CLEAR}"
 	
 	def convert_to_string(self, variable):
 		if isinstance(variable, str):

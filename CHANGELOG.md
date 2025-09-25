@@ -1,6 +1,10 @@
 # Changelog
 
 This project adheres to [Semantic Versioning](https://semver.org).
+## [2.4.7]
+## Fixed
+- Colour resets now to allow for coloured values to print without being affected by test result colours
+
 ## [2.4.6]
 ### Improved
 - Enum's now print according to `__str__` 

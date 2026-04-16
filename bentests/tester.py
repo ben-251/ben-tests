@@ -1,10 +1,10 @@
 from typing import List, Literal, Type
-from .utils import GREEN, CLEAR, YELLOW, RED, TestFail, TestPass, TestSkip, pluralise
+from .utils import GREEN, CLEAR, YELLOW, RED, TestFail, TestPass, TestSkip, pluralise, Printer
+from . import utils
 from typing import Optional
 from enum import Enum, auto
 import re
 import inspect
-
 
 class TestResult(Enum):
 	PASS = auto()
@@ -54,7 +54,7 @@ class testGroup:
 		return new_test
 
 
-def test_all(*args: type[testGroup],skip_passes=None, stats_amount:Optional[Literal["high", "low","none"]]=None) -> None:
+def test_all(*args: type[testGroup],skip_passes=None, stats_amount:Optional[Literal["high", "low","none"]]=None,nesting_output_depth=None) -> None:
 	'''
 	Run all the tests within the specified test groups.
 
@@ -62,6 +62,7 @@ def test_all(*args: type[testGroup],skip_passes=None, stats_amount:Optional[Lite
 	.. code-block:: python
 		bentests.test_all(ArithmeticTests, ExponentialTests)
 	
+	Skip Passes: if checked, we don't display passed tests.
 	Stats Amount: The Volume of statistics to provide. "high", "low", and "none".
 	if any other value is provided, "low" is assumed.
 	
@@ -77,6 +78,10 @@ def test_all(*args: type[testGroup],skip_passes=None, stats_amount:Optional[Lite
 	if skip_passes is None: # if skip_passes is _still_ none, then we go to default (which happens to be False)
 		skip_passes = DEFAULT_SKIP_BEHAVIOUR
 	all_results = []
+
+	if not nesting_output_depth is None: 
+		custom_printer = Printer(max_depth = nesting_output_depth)
+		utils.set_custom_printer(custom_printer)
 
 	if args is None:
 		raise ValueError("No tests given")

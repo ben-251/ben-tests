@@ -51,13 +51,20 @@ class AssertType(Enum):
 
 printer = Printer()
 
+def set_custom_printer(p:Printer):
+    global printer
+    printer = p
+
+
+
+
 def catch_output(func:Callable, *args, **kwargs):
 	buffer = StringIO()
 	with redirect_stdout(buffer):
 		func(*args, **kwargs)
 	return buffer.getvalue()
 
-def catch_pretty_output(value):
+def catch_pretty_output(value:Any):
 	custom_pprint = True
 	if custom_pprint:
 		output = catch_output(printer.pretty_print, value)
@@ -111,7 +118,6 @@ class RaisesFailError(TestFail):
 			return f"{RED}{' '*4}Did not raise {self.expected.__name__}.{CLEAR}"
 		else:
 			return f"{RED}{' '*4}Raises {self.actual.__name__}.{CLEAR}"
-
 
 class NotRaisesFailError(TestFail):
 	def __init__(self,actual, avoiding_exception):

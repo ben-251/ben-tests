@@ -1,3 +1,6 @@
+'''
+A file to desmonstrate the capabilities/use cases of the module to the end-user.
+'''
 from bentests import testGroup, test_all, asserts
 
 class FloatTests(testGroup):

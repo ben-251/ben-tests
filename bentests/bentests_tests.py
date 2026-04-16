@@ -19,6 +19,8 @@ importlib.reload(bentests.asserts)
 from bentests.tester import testGroup, test_all
 import bentests.asserts as asserts
 
+
+
 class FloatTests(testGroup):
 	def test_almost_right(self):
 		asserts.assertAlmostEquals(1.00134758374583475,1,error_margin=3)
@@ -72,6 +74,16 @@ class MiscTests(testGroup):
 		asserts.assertEquals("1", 1)
 
 class FancyOutputTests(testGroup):
+	def testThriceandFourNestingOutput(self):
+		var  = [
+			(1, [2,3]),
+			(45, [4,5,6])
+		]
+		actual  = [
+			(1, [("a","b"),("c","d")]),
+			(45, [True, True])
+		]
+		asserts.assertEquals(var, actual)
 	def testEnumList(self):
 		class AnimalType(Enum):
 			Dog = 0
@@ -87,4 +99,4 @@ class FancyOutputTests(testGroup):
 class EmptyTests(testGroup):
 	...
 
-test_all(FloatTests, ArithmeticTests, ExponentialTests, EmptyTests, MiscTests, FancyOutputTests)
+test_all(FloatTests, ArithmeticTests, ExponentialTests, EmptyTests, MiscTests, FancyOutputTests, nesting_output_depth=4)

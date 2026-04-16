@@ -1,8 +1,12 @@
 # Changelog
 
 This project adheres to [Semantic Versioning](https://semver.org).
+## [2.4.8]
+### Improved
+- Added option to change nesting depth for display during error messages.
+
 ## [2.4.7]
-## Fixed
+### Fixed
 - Colour resets now to allow for coloured values to print without being affected by test result colours
 
 ## [2.4.6]
@@ -20,7 +24,6 @@ This project adheres to [Semantic Versioning](https://semver.org).
 ### In Development
 - Nested Test Groups
 - diff feature
-
 
 ## [2.4.3]
 ### Improved 
@@ -58,7 +61,7 @@ This project adheres to [Semantic Versioning](https://semver.org).
 
 ## [2.2.0]
 
-### CHanged 
+### Changed 
 - changed function display to split words in function names to avoid bias of snake and camel (e.g "addNumbersTwice" -> "add-numbers-twice")
 
 ### In Development

@@ -8,6 +8,7 @@ from contextlib import redirect_stdout
 from functools import singledispatchmethod
 from bentests.display import Printer
 
+BORDER = "\n - - - - - - - - -  \n\n" 
 
 CLEAR = colorama.Style.RESET_ALL
 GREEN = colour = colorama.Fore.GREEN

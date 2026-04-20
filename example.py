@@ -1,6 +1,7 @@
 '''
 A file to desmonstrate the capabilities/use cases of the module to the end-user.
 '''
+
 from bentests import testGroup, test_all, asserts
 
 class FloatTests(testGroup):
@@ -66,5 +67,8 @@ class MiscTests(testGroup):
 class EmptyTests(testGroup):
 	...
 
-#b.test_all(FloatTests, ExponentialTests, ArithmeticTests, EmptyTests, MiscTests, stats_amount="high")
-test_all(FloatTests, ArithmeticTests, ExponentialTests, EmptyTests, MiscTests)
+test_all(
+	FloatTests, ArithmeticTests, ExponentialTests,
+	EmptyTests, MiscTests,
+	nesting_output_depth=4
+)

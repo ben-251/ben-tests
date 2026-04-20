@@ -1,6 +1,11 @@
 # Changelog
 
 This project adheres to [Semantic Versioning](https://semver.org).
+
+## [2.4.9]
+### Changed
+- Tests now run according to the definition order, not alphabetical.
+
 ## [2.4.8]
 ### Improved
 - Added option to change nesting depth for display during error messages.

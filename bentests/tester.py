@@ -1,5 +1,5 @@
 from typing import List, Literal, Type
-from .utils import GREEN, CLEAR, YELLOW, RED, TestFail, TestPass, TestSkip, pluralise, Printer
+from .utils import GREEN, CLEAR, YELLOW, RED, TestFail, TestPass, TestSkip, pluralise, Printer, BORDER
 from . import utils
 from typing import Optional
 from enum import Enum, auto
@@ -83,21 +83,18 @@ def test_all(*args: type[testGroup],skip_passes=None, stats_amount:Optional[Lite
 		custom_printer = Printer(max_depth = nesting_output_depth)
 		utils.set_custom_printer(custom_printer)
 
-	if args is None:
-		raise ValueError("No tests given")
-
 	print("Starting tests...")
 	for test_group in args:
 		methods = getMethodNames(test_group)
 		if methods:
-			print(f"\nRunning tests in \"{test_group.__name__}\":") 
+			print(f"{BORDER}Running tests in \"{test_group.__name__}\":") 
 			results = getTestResults(test_group, methods, skip_passes=skip_passes)
 			displayStats(results)
 			all_results.append(results)
 		else:
 			print(f"{YELLOW}\nNo tests found in \"{test_group.__name__}\".{CLEAR}")
 			all_results.append(None)
-	print("\nTests Complete.")
+	print(f"{BORDER}Tests Complete.")
 	if not stats_amount == "none":
 		display_overall_stats(all_results, stats_amount)
  
@@ -112,9 +109,6 @@ def getTestResults(cls: Type[testGroup], method_list, skip_passes=None) -> testG
 				bentests.assertEquals(1,2-1)
 		bentests.test_all(ArithmeticTests)
 	'''
-	if cls is None:
-		raise ValueError("class is none for some reason?!")
-
 	test_group_instance: testGroup = cls()
 	for method_name in method_list:
 		new_result = getSingleTestResult(cls, method_name, skip_passes=skip_passes)
@@ -223,8 +217,7 @@ def display_overall_stats(results:List[testGroup], stats_amount:str):
 
 def getMethodNames(cls: type[testGroup]) -> List[str]:
 	method_list = []
-	for attribute_name in dir(cls):
-		attribute = getattr(cls, attribute_name)
+	for attribute_name, attribute in cls.__dict__.items():
 		is_callable = callable(attribute)
 		is_magic_method = attribute_name.startswith('__') and attribute_name.endswith('__')
 		if is_callable and not is_magic_method:
